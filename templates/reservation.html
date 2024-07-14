@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Réservation</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="container">
+        <h1>Réservation</h1>
+        <form>
+            <label for="nom">Nom:</label>
+            <input type="text" id="nom" name="nom" required>
+
+            <label for="prenom">Prénom:</label>
+            <input type="text" id="prenom" name="prenom" required>
+
+            <label for="telephone">Téléphone:</label>
+            <input type="tel" id="telephone" name="telephone" required>
+
+            <label for="numeroSalle">Numéro de salle:</label>
+            <input type="number" id="numeroSalle" name="numeroSalle" required>
+
+            <label for="dateDebutReunion">Date de début de la réunion:</label>
+            <input type="datetime-local" id="dateDebutReunion" name="dateDebutReunion" required>
+
+            <label for="dateFinReunion">Date de fin de la réunion:</label>
+            <input type="datetime-local" id="dateFinReunion" name="dateFinReunion" required>
+
+            <button type="submit">Valider la réservation</button>
+        </form>
+    </div>
+</body>
+</html>
