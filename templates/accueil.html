@@ -5,24 +5,28 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Accueil</title>
-    <link rel="stylesheet" href="{% static "css/style.css" %}">
+    <link rel="stylesheet" href="{% static 'main.css' %}">
 
 </head>
-<body>
+<body class="accueil">
     <header>
         <nav>
             <ul>
                 <li>Accueil</a></li>
                 <li>À propos</a></li>
                 <li>Contact</a></li>
-                <li>Réserver</a></li>
+                <li><a href="{% url 'login' %}"><button>Réserver</button></a></li>
             </ul>
         </nav>
     </header>
-
-    <div class="container">
-        <h1>Bienvenue sur notre système de réservation de salle!</h1>
-        <p>Pour réserver une salle, veuillez cliquer sur le bouton "Réserver" dans la barre de navigation.</p>
+    <div class="container_accueil">
+       
+         <!--<div style="width: 100px;"><img style="height:500px; width:500" src="{{ donnee.image }}" alt="{{ donnee.nom_de_salle }}">
+          <a href="">reserver</a>
+        </div> -->
+        <p>Bienvenue sur notre système de réservation de salle de reunion!</p>
+        <p>Oubliez les réservations de salles de réunion chaotiques, optez pour la simplicité et l'efficacité !
+            Découvrez notre système de réservation en ligne et transformez vos réunions en un succès.</p>
     </div>
 </body>
 </html>

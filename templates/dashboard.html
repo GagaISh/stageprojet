@@ -5,19 +5,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Administration</title>
-    <link rel="stylesheet" href="{% static "css/style.css" %}">
+    <link rel="stylesheet" href="{% static 'main.css' %}">
 </head>
-<body>
+<body class="tableau_Bord">
+    <div class="container_tableau_Bord">
     <header>
         <h1>Administration</h1>
     </header>
-
     <nav>
         <ul>
-            <li><button type="submit">Liste des utilisateurs</button></li>
-            <li><button type="submit">Ajouter une salle</button></li>
-            <li><button type="submit">Salles réservées</button></li>
-            <li><button type="submit">Salles disponibles</button></li>
+            <li><button type="submit"><a href="{% url 'liste'%}">Liste des utilisateurs</a></button></li>
+            <li><button type="submit"> <a href="{%url 'ajout_salle'%}">Ajouter une salle</a></button></li>
+            <li><button type="submit"><a href="{%url 'liste_salles_reserve'%}">Salles réservées</a></button></li>
+            <li><button type="submit"><a href="{%url 'liste_salles_disponible'%}">Salles disponibles</a></button></li>
         </ul>
     </nav>
 </body>

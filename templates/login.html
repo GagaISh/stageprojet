@@ -5,20 +5,26 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Connexion</title>
-    <link rel="stylesheet" href="{% static "css/style.css" %}">
+    <link rel="stylesheet" href="{% static 'main.css' %}"/>
 </head>
-<body>
-    <div class="container">
+<body class="connexion">
+    <div class="container_connexion">
         <h1>Connexion</h1>
-        <form>
+        <form method="post" action="{% url 'connexion' %}">
+            {% if error %}
+            <div class="error" style="color: rgb(221, 27, 27);">{{ error }}</div>
+              {% endif %}
+              {% csrf_token %}        
             <label for="email">Email:</label>
             <input type="email" id="email" name="email" required>
 
             <label for="motDePasse">Mot de passe:</label>
             <input type="password" id="motDePasse" name="motDePasse" required>
 
-            <button type="submit">Se connecter</button>
+            <button type="submit"> connecter</button>
         </form>
+        <a href="{% url 'signup'%}" style="left: 50px;">Create acount</a>
+ 
     </div>
 </body>
 </html>
