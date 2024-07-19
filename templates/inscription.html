@@ -5,6 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Inscription</title>
+<<<<<<< HEAD
     <link rel="stylesheet" href="{% static 'main.css' %}" />
 </head>
 <body class="inscription">
@@ -14,6 +15,16 @@
             {% csrf_token %}
             {{ form.as_p }}
             
+=======
+    <link rel="stylesheet" href="{% static "css/style.css" %}" />
+</head>
+<body>
+    <div class="container">
+        <h1>Inscription</h1>
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+>>>>>>> a5424556905dca1bbfacb3a2b88e4557ae7460f9
             <button type="submit">S'inscrire</button>
         </form>
     </div>

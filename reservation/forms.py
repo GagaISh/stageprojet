@@ -2,6 +2,7 @@ from django import forms
 from .models import CustomUser
 
 class InscriptionForm(forms.ModelForm):
+
     password1 = forms.CharField(label="Mot de passe", widget=forms.PasswordInput)
     password2 = forms.CharField(label="Confirmer le mot de passe", widget=forms.PasswordInput)
 
@@ -30,3 +31,4 @@ class InscriptionForm(forms.ModelForm):
     class ConnexionForm(forms.Form):
      email = forms.EmailField(label='Adresse e-mail')
      mot_de_passe = forms.CharField(label='Mot de passe', widget=forms.PasswordInput)
+
