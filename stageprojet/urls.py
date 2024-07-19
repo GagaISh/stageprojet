@@ -24,7 +24,6 @@ from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-<<<<<<< HEAD
     path('signup/', SignupView.as_view(), name='signup'),
     path('login/', ConnexionView.as_view(), name='connexion'),
     path('ajout_salle/', AjoutSalleView.as_view(), name='ajout_salle'),
@@ -51,17 +50,6 @@ urlpatterns = [
     path('reservation_salle/', ReservationSalleView.as_view(), name='reservation_salle'),
     path('ajouter_salle/', AjouterSalleView.as_view(), name='ajouter_salle'),
     path('utilisateurs/', UtilisateursView.as_view(), name='utilisateurs'),
-=======
-    path('',views.accueil),
-    path('login/',views.login),
-    path('inscription/',views.inscription),
-    path('formulaire/',views.Formulairereservation),
-    path('admi/',views.dashboard),
-    path('salle/',views.salle),
-    path('ajout/',views.ajouterSalle),
-    path('reservationSalle/',views.reservationSalle),
-    path('utilisateurs/',views.utilisateurs),
->>>>>>> a5424556905dca1bbfacb3a2b88e4557ae7460f9
 ]
 urlpatterns += staticfiles_urlpatterns()
 

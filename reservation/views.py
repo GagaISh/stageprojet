@@ -1,6 +1,3 @@
-from django.http import HttpResponse
-from django.shortcuts import render, redirect
-<<<<<<< HEAD
 from django.views.generic import View
 from reservation.models import CustomUser,Salle,Reservation
 from .forms import InscriptionForm
@@ -13,32 +10,12 @@ from rest_framework.views import APIView
 from rest_framework.response import Response
 from reservation.serializers import CustomUserSerializer, SalleSerializer, ReservationSerializer
 from rest_framework import status
-=======
-from reservation.models import CustomUser
-from .forms import InscriptionForm
-from django.contrib.auth import login, authenticate
-
-
-def inscription(request):
-  if request.method == 'POST':
-    form = InscriptionForm(request.POST)
-    if form.is_valid():
-      user = form.save()
-      login(request)
-      return redirect('accueil') 
-  else:
-    form = InscriptionForm()
-  return render(request, 'inscription.html', {'form': form})
-
->>>>>>> a5424556905dca1bbfacb3a2b88e4557ae7460f9
-
 
 class SignupView(View):
     def get(self, request):
         form = InscriptionForm()
         return render(request, 'inscription.html', {'form': form})
 
-<<<<<<< HEAD
     def post(self, request):
         form = InscriptionForm(request.POST)
         if form.is_valid():
@@ -46,10 +23,6 @@ class SignupView(View):
             return redirect('accueil')
         else:
             return render(request, 'inscription.html', {'form': form})
-=======
-def signUp(request):
-    return render(request, "inscription.html")
->>>>>>> a5424556905dca1bbfacb3a2b88e4557ae7460f9
 
 class ConnexionView(View):
     def get(self, request):
