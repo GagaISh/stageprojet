@@ -1,39 +1,35 @@
-from django.views.generic import View
-from reservation.models import CustomUser,Salle,Reservation
-from .forms import InscriptionForm
+from reservation.models import CustomUser,Room,Booking
+from .forms import SignUpForm
 from django.contrib.auth import login, authenticate
-from django.contrib import messages
 import os
 from django.core.files.storage import default_storage
 from django.shortcuts import render, redirect
-from rest_framework.views import APIView
 from rest_framework.response import Response
-from reservation.serializers import CustomUserSerializer, SalleSerializer, ReservationSerializer
+from reservation.serializers import CustomUserSerializer, RoomSerializer, BookingSerializer
 from rest_framework import status
+from rest_framework import viewsets, generics
+from django.views.generic import TemplateView
 
-class SignupView(View):
-    def get(self, request):
-        form = InscriptionForm()
-        return render(request, 'inscription.html', {'form': form})
+class SignupViewSet(viewsets.ViewSet):
+    queryset = CustomUser.objects.all()
+    serializer_class = CustomUserSerializer
 
-    def post(self, request):
-        form = InscriptionForm(request.POST)
+    def list(self, request):
+        form = SignUpForm()
+        return render(request, 'signup.html', {'form': form})
+
+    def create(self, request):
+        form = SignUpForm(request.data)
         if form.is_valid():
             form.save()
-            return redirect('accueil')
+            return redirect('home')
         else:
-            return render(request, 'inscription.html', {'form': form})
+            return render(request, 'signup.html', {'form': form})
 
-class ConnexionView(View):
-    def get(self, request):
-        page = 'login'
-        context = {'page': page}
-        return render(request, 'login.html', context)
-
-    def post(self, request):
-        page = 'login'
-        email = request.POST.get('email').lower()
-        password = request.POST.get('password')
+class LoginViewSet(viewsets.ViewSet):
+    def create(self, request):
+        email = request.data.get('email').lower()
+        password = request.data.get('password')
         try:
             user = CustomUser.objects.get(email=email)
         except CustomUser.DoesNotExist:
@@ -44,174 +40,121 @@ class ConnexionView(View):
             if user.email == "ishimwegraciella@gmail.com":
                 return redirect('admin')
             else:
-                return redirect('reservation')
+                return redirect('booking')
         else:
-            context = {'page': page, 'error': 'Identifiants incorrects'}
-            return render(request, 'login.html', context)
+            context = {'error': 'Incorrect identifiers'}
+            return Response(context, status=status.HTTP_400_BAD_REQUEST)
 
 
-class AjoutSalleView(View):
-    def get(self, request):
-        return render(request, 'ajoutsalle.html', {})
-
-    def post(self, request):
-        nom = request.POST.get('nom')
-        lieu = request.POST.get('lieu')
-        capacite = request.POST.get('capacite')
-        prix = request.POST.get('prix')
+class AddRoomViewSet(viewsets.ViewSet):
+    def create(self, request):
+        room_name = request.data.get('room_name')
+        place = request.data.get('place')
+        capacity = request.data.get('capacity')
+        price = request.data.get('price')
         image = request.FILES.get('image')
 
-        salle = Salle(nom_de_salle=nom, lieu=lieu, capacite=capacite, prix=prix)
+        room = Room(room_name=room_name, place=place, capacity=capacity, price=price)
         if image:
             image_path = os.path.join('static', 'images', image.name)
-            salle.image = image_path
+            room.image = image_path
             with default_storage.open(image_path, 'wb') as dest:
                 for chunk in image.chunks():
                     dest.write(chunk)
-        salle.save()
-        return redirect('listessalle')
+        room.save()
+        return redirect('roomlist')
 
-class ReserverView(View):
-    def get(self, request):
-        return render(request, 'reservation.html', {'form': "form"})
-
-    def post(self, request):
-        numero_salle = request.POST.get('numero')
-        datedebut = request.POST.get('datedebut')
-        datefin = request.POST.get('datefin')
+class BookViewSet(viewsets.ViewSet):
+    def create(self, request):
+        room_number = request.data.get('number')
+        start_date = request.data.get('start_date')
+        end_date = request.data.get('end_date')
         id_user = request.session.get('user_id')
         try:
-            salle = Salle.objects.get(numero_de_salle=numero_salle)
-        except Salle.DoesNotExist:
-            return render(request, 'reservation.html', {'error': 'Salle introuvable'})
+            room = Room.objects.get(room_Number=room_number)
+        except Room.DoesNotExist:
+            return Response({'error': 'Room not found'}, status=status.HTTP_404_NOT_FOUND)
 
-        reservation = Reservation(numero_de_salle=salle, datedebut=datedebut, datefin=datefin, id_user=id_user)
-        reservation.save()
-        if not Reservation.objects.filter(numero_de_salle=salle, datedebut__lte=datedebut, datefin__gte=datefin).exists():
-            salle.disponibilite = True
+        booking = Booking(room_Number=room, Start_date=start_date, end_date=end_date, id_user=id_user)
+        booking.save()
+        if not Booking.objects.filter(room_Number=room, Start_date__lte=start_date, end_date__gte=end_date).exists():
+            room.availability = True
         else:
-            salle.disponibilite = False
+            room.availability = False
 
-        salle.save()
+        room.save()
 
-        return redirect('listereserve')
+        return redirect('list_reserve')
 
-class ListesView(View):
-    def get(self, request):
-        donnees = CustomUser.objects.all()
-        return render(request, 'listedata.html', {'donnees': donnees})
-class ListesReservesView(View):
-    def get(self, request):
-        donnees = Reservation.objects.all()
-        return render(request, 'listeReserve.html', {'donnees': donnees})
-class AccueilView(View):
-    def get(self, request):
-        donnees = Salle.objects.all()
-        return render(request, "accueil.html", {'donnees': donnees})
-class ListesSallesReserveView(View):
-    def get(self, request):
-        donnees = Salle.objects.filter(disponibilite=False)
-        return render(request, 'listesalle.html', {'donnees': donnees})
-class ListesSallesDisponibleView(View):
-    def get(self, request):
-        donnees = Salle.objects.filter(disponibilite=True)
-        return render(request, 'listesalledisponible.html', {'donnees': donnees})
+class ListsViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = CustomUser.objects.all()
+    serializer_class = CustomUserSerializer
+class ListsReservesViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Booking.objects.all()
+    serializer_class = BookingSerializer
+class HomeViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Room.objects.all()
+    serializer_class = RoomSerializer
+class ListsRoomsBookViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Room.objects.filter(availability=False)
+    serializer_class = RoomSerializer
+class ListsRoomsAvailableViewSet(viewsets.ReadOnlyModelViewSet):
+    queryset = Room.objects.filter(availability=True)
+    serializer_class = RoomSerializer
 
-class CustomUserListView(APIView):
-    def get(self, request):
-        customusers = CustomUser.objects.all()
-        serializer = CustomUserSerializer(customusers, many=True)
-        return Response(serializer.data)
+class CustomUserListView(generics.ListAPIView):
+    queryset = CustomUser.objects.all()
+    serializer_class = CustomUserSerializer
+class CustomUserDetailView(generics.RetrieveAPIView):
+    queryset = CustomUser.objects.all()
+    serializer_class = CustomUserSerializer
+class CustomUserUpdateView(generics.UpdateAPIView):
+    queryset = CustomUser.objects.all()
+    serializer_class = CustomUserSerializer
 
-class CustomUserDetailView(APIView):
-    def get(self, request, pk):
-        customuser = CustomUser.objects.get(pk=pk)
-        serializer = CustomUserSerializer(customuser)
-        return Response(serializer.data)
+class RoomListView(generics.ListAPIView):
+    queryset = Room.objects.all()
+    serializer_class = RoomSerializer
+class RoomDetailView(generics.RetrieveAPIView):
+    queryset = Room.objects.all()
+    serializer_class = RoomSerializer
+class RoomUpdateView(generics.UpdateAPIView):
+    queryset = Room.objects.all()
+    serializer_class = RoomSerializer
 
-class CustomUserUpdateView(APIView):
-    def put(self, request, pk):
-        customuser = CustomUser.objects.get(pk=pk)
-        serializer = CustomUserSerializer(customuser, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+class BookingListView(generics.ListAPIView):
+    queryset = Booking.objects.all()
+    serializer_class = BookingSerializer
+class BookingDetailView(generics.RetrieveAPIView):
+    queryset = Booking.objects.all()
+    serializer_class = BookingSerializer
+class BookingUpdateView(generics.UpdateAPIView):
+    queryset = Booking.objects.all()
+    serializer_class = BookingSerializer
 
-class SalleListView(APIView):
-    def get(self, request):
-        salles = Salle.objects.all()
-        serializer = SalleSerializer(salles, many=True)
-        return Response(serializer.data)
+class LoginView(TemplateView):
+    template_name = "login.html"
 
-class SalleDetailView(APIView):
-    def get(self, request, pk):
-        salle = Salle.objects.get(pk=pk)
-        serializer = SalleSerializer(salle)
-        return Response(serializer.data)
+class SignUpView(TemplateView):
+    template_name = "signup.html"
 
-class SalleUpdateView(APIView):
-    def put(self, request, pk):
-        salle = Salle.objects.get(pk=pk)
-        serializer = SalleSerializer(salle, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+class BookingView(TemplateView):
+    template_name = "booking.html"
 
-class ReservationListView(APIView):
-    def get(self, request):
-        reservations = Reservation.objects.all()
-        serializer = ReservationSerializer(reservations, many=True)
-        return Response(serializer.data)
+class DashboardView(TemplateView):
+    template_name = "dashboard.html"
 
-class ReservationDetailView(APIView):
-    def get(self, request, pk):
-        reservation = Reservation.objects.get(pk=pk)
-        serializer = ReservationSerializer(reservation)
-        return Response(serializer.data)
+class RoomView(TemplateView):
+    template_name = "home.html"
 
-class ReservationUpdateView(APIView):
-    def put(self, request, pk):
-        reservation = Reservation.objects.get(pk=pk)
-        serializer = ReservationSerializer(reservation, data=request.data)
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data)
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+class BookingRoomView(TemplateView):
+    template_name = "home.html"
 
-class LoginView(View):
-    def get(self, request):
-        return render(request, "login.html")
+class AddRoomView(TemplateView):
+    template_name = "addRoom.html"
 
-class InscriptionView(View):
-    def get(self, request):
-        return render(request, "inscription.html")
-
-class ReservationView(View):
-    def get(self, request):
-        return render(request, "reservation.html")
-
-class DashboardView(View):
-    def get(self, request):
-        return render(request, "dashboard.html")
-
-class SalleView(View):
-    def get(self, request):
-        return render(request, "accueil.html")
-
-class ReservationSalleView(View):
-    def get(self, request):
-        return render(request, "accueil.html")
-
-class AjouterSalleView(View):
-    def get(self, request):
-        return render(request, "ajoutsalle.html")
-
-class UtilisateursView(View):
-    def get(self, request):
-        return render(request, "accueil.html")
-
+class UsersView(TemplateView):
+    template_name = "home.html"
 
 
 

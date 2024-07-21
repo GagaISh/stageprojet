@@ -15,41 +15,13 @@ Including another URLconf
     2. Add a URL to urlpatterns:  path('blog/', include('blog.urls'))
 """
 from django.contrib import admin
-from django.urls import path
+from django.urls import include,path
 from reservation.views import *
-from stageprojet import settings
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
-
-
 urlpatterns = [
-    path('admin/', admin.site.urls),
-    path('signup/', SignupView.as_view(), name='signup'),
-    path('login/', ConnexionView.as_view(), name='connexion'),
-    path('ajout_salle/', AjoutSalleView.as_view(), name='ajout_salle'),
-    path('reserver/', ReserverView.as_view(), name='reserver'),
-    path('liste/', ListesView.as_view(), name='liste'),
-    path('liste_reserve/', ListesReservesView.as_view(), name='liste_reserve'),
-    path('', AccueilView.as_view(), name='accueil'),
-    path('liste_salles_reserve/', ListesSallesReserveView.as_view(), name='liste_salles_reserve'),
-    path('liste_salles_disponible/', ListesSallesDisponibleView.as_view(), name='liste_salles_disponible'),
-    path('customusers/', CustomUserListView.as_view(), name='customuser_list'),
-    path('customusers/<int:pk>/', CustomUserDetailView.as_view(), name='customuser_detail'),
-    path('customusers/<int:pk>/update/', CustomUserUpdateView.as_view(), name='customuser_update'),
-    path('salles/', SalleListView.as_view(), name='salle_list'),
-    path('salles/<int:pk>/', SalleDetailView.as_view(), name='salle_detail'),
-    path('salles/<int:pk>/update/', SalleUpdateView.as_view(), name='salle_update'),
-    path('reservations/', ReservationListView.as_view(), name='reservation_list'),
-    path('reservations/<int:pk>/', ReservationDetailView.as_view(), name='reservation_detail'),
-    path('reservations/<int:pk>/update/', ReservationUpdateView.as_view(), name='reservation_update'),
-    path('login/', LoginView.as_view(), name='login'),
-    path('inscription/', InscriptionView.as_view(), name='inscription'),
-    path('reservation/', ReservationView.as_view(), name='reservation'),
-    path('admi/', DashboardView.as_view(), name='admin'),
-    path('salle/', SalleView.as_view(), name='salle'),
-    path('reservation_salle/', ReservationSalleView.as_view(), name='reservation_salle'),
-    path('ajouter_salle/', AjouterSalleView.as_view(), name='ajouter_salle'),
-    path('utilisateurs/', UtilisateursView.as_view(), name='utilisateurs'),
+     path('admin/', admin.site.urls),
+    path('api/', include('reservation.urls')),
 ]
 urlpatterns += staticfiles_urlpatterns()
 

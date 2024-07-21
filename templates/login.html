@@ -5,16 +5,12 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Connexion</title>
-<<<<<<< HEAD
     <link rel="stylesheet" href="{% static 'main.css' %}"/>
-=======
-    <link rel="stylesheet" href="{% static "css/style.css" %}"/>
->>>>>>> a5424556905dca1bbfacb3a2b88e4557ae7460f9
 </head>
 <body class="connexion">
     <div class="container_connexion">
         <h1>Connexion</h1>
-        <form method="post" action="{% url 'connexion' %}">
+        <form method="post" action="{% url 'Login' %}">
             {% if error %}
             <div class="error" style="color: rgb(221, 27, 27);">{{ error }}</div>
               {% endif %}
