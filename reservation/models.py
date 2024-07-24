@@ -51,7 +51,7 @@ class Room(models.Model):
     availability=models.BooleanField(default=True)
 
 class Booking(models.Model):
-    id_salle = models.ForeignKey('reservation.Room', on_delete=models.CASCADE)
+    id_room = models.ForeignKey('reservation.Room', on_delete=models.CASCADE)
     id_user = models.ForeignKey('reservation.CustomUser', on_delete=models.CASCADE)
     room_name = models.CharField(max_length=100)
     Start_date = models.DateTimeField()

@@ -1,44 +1,32 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    {% load static %}
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="{% static 'main.css' %}">
-</head>
-<body>
-    
-{% block content %}
-    <h2>Mes données</h2>
-    <table>
-        <thead>
-            <tr>
-                <th>#</th>
-                <th>Nom</th>
-                <th>lieu</th>
-                <th>capacite</th>
-                <th>prix</th>
-                <th>image</th>
-                <th>disponibilite</th>
-                <th>#</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for donnee in donnees %}
-            <tr>
-                <td>{{ donnee.id }}</td>
-                <td>{{ donnee.nom_de_salle }}</td>
-                <td>{{ donnee.lieu }}</td>
-                <td>{{ donnee.capacite }}</td>
-                <td>{{ donnee.prix }}</td>
-                <td>{{ donnee.image }}</td>
-                <td>{{ donnee.disponibilite }}</td>
-                <td><a href="">detailler</a></td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-{% endblock %}
-</body>
-</html>
+{% extends "base.html"%}
+    {% block content %}
+        <h2>Les salles disponibles</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>#</th>
+                    <th>Nom</th>
+                    <th>lieu</th>
+                    <th>capacite</th>
+                    <th>prix</th>
+                    <th>image</th>
+                    <th>disponibilite</th>
+                    <th>#</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for data in data %}
+                <tr>
+                    <td>{{ data.id }}</td>
+                    <td>{{ data.nom_de_salle }}</td>
+                    <td>{{ data.lieu }}</td>
+                    <td>{{ data.capacite }}</td>
+                    <td>{{ data.prix }}</td>
+                    <td>{{ data.image }}</td>
+                    <td>{{ data.disponibilite }}</td>
+                    <td><a href="">detailler</a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endblock %}

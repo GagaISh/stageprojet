@@ -1,45 +1,37 @@
-<!DOCTYPE html>
-<html lang="fr">
-    {% load static %}
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Ajouter une salle</title>
-    <link rel="stylesheet" href="{% static "main.css" %}">
-</head>
-<body class="ajouter">
-    <div class="container_ajouter">
-    <h1>Ajouter une salle</h1>
-    <form method="post" action="{% url 'ajout_salle' %}" enctype="multipart/form-data">
-        {% csrf_token %}        
-        <label for="nom">Nom de la salle:</label>
-        <input type="text" id="nom" name="nom" required>
+{% extends "base.html" %}
+    {% block content %}
+        <div class="container_ajouter">
+        <h1>Ajouter une salle</h1>
+        <form method="post" action="{% url 'add-room' %}" enctype="multipart/form-data">
+            {% csrf_token %}        
+            <label for="nom">Nom de la salle:</label>
+            <input type="text" id="nom" name="nom" required>
 
-        <label for="lieu">Lieu:</label>
-        <input type="text" id="lieu" name="lieu" required>
+            <label for="lieu">Lieu:</label>
+            <input type="text" id="lieu" name="lieu" required>
 
-        <label for="capacite">Capacité:</label>
-        <input type="number" id="capacite" name="capacite" required>
+            <label for="capacite">Capacité:</label>
+            <input type="number" id="capacite" name="capacite" required>
 
-        <label for="prix">Prix:</label>
-        <input type="number" id="prix" name="prix" required>
-        <label for="Image">Image:</label>
-        <input type="file" id="image" name="image" accept="image/*" onchange="previewImage(this)">
-        <img id="image-preview" src="#" alt="Aperçu de l'image" style="max-width: 200px; display: none;">
-        <button type="submit">Ajouter</button>
-    </form>
+            <label for="prix">Prix:</label>
+            <input type="number" id="prix" name="prix" required>
+            <label for="Image">Image:</label>
+            <input type="file" id="image" name="image" accept="image/*" onchange="previewImage(this)">
+            <img id="image-preview" src="#" alt="Aperçu de l'image" style="max-width: 200px; display: none;">
+            <button type="submit">Ajouter</button>
+        </form>
     
-<script>
-    function previewImage(input) {
-        if (input.files && input.files[0]) {
-            var reader = new FileReader();
-            reader.onload = function (e) {
-                document.getElementById('image-preview').src = e.target.result;
-                document.getElementById('image-preview').style.display = 'block';
-            };
-            reader.readAsDataURL(input.files[0]);
-        }
-    }
-</script>
-</body>
-</html>
+        <script>
+            function previewImage(input) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+                    reader.onload = function (e) {
+                        document.getElementById('image-preview').src = e.target.result;
+                        document.getElementById('image-preview').style.display = 'block';
+                    };
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+        </script>
+
+    {% endblock %}

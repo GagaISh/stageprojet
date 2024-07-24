@@ -1,37 +1,29 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    {% load static %}
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="{% static 'main.css' %}">
-</head>
-<body>
-    
-{% block content %}
-    <h2>Mes données</h2>
-    <table>
-        <thead>
-            <tr>
-                <th>numero salle</th>
-                <th>date debut</th>
-                <th>Date fin</th>
-                <th>#</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for donnee in donnees %}
-            <tr>
-                <td>{{ donnee.numero_de_salle }}</td>
-                <td>{{ donnee.datedebut }}</td>
-                <td>{{ donnee.datefin }}</td>
-                <td>{{ donnee.id_user }}</td>
-                <td><a href="">detailler</a></td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-{% endblock %}
-</body>
-</html>
+{% extends "base.html" %}
+    {% block content %} 
+            <h2>Les salles reservées</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Id utilisateur</th>
+                        <th>Id salle</th> 
+                        <th>Nom de la salle</th>
+                        <th>date debut</th>
+                        <th>Date fin</th>
+                        <th>#</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for data in data %}
+                    <tr>
+                        <td>{{ data.id_user }}</td>
+                        <td>{{ data.id_room}}</td>
+                        <td>{{ data.room_name }}</td>
+                        <td>{{ data.Start_date }}</td>
+                        <td>{{ data.end_date }}</td>
+                        
+                        <td><a href="">detailler</a></td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+    {% endblock %}

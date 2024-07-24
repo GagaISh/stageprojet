@@ -1,40 +1,28 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    {% load static %}
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="{% static 'main.css' %}">
-</head>
-<body>
-    
-{% block content %}
-    <h2>Mes données</h2>
-    <table>
-        <thead>
-            <tr>
-                <th>Nom</th>
-                <th>Prenom</th>
-                <th>Date de naissance</th>
-                <th>adresse</th>
-                <th>E-mail</th>
-                <th>#</th>
-            </tr>
-        </thead>
-        <tbody>
-            {% for donnee in donnees %}
-            <tr>
-                <td>{{ donnee.nom }}</td>
-                <td>{{ donnee.prenom }}</td>
-                <td>{{ donnee.date_naissance }}</td>
-                <td>{{ donnee.adresse }}</td>
-                <td>{{ donnee.email }}</td>
-                <td><a href="">detailler</a></td>
-            </tr>
-            {% endfor %}
-        </tbody>
-    </table>
-{% endblock %}
-</body>
-</html>
+{% extends "base.html" %}
+    {% block content %}
+        <h2>Liste des utilisateurs</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Nom</th>
+                    <th>Prenom</th>
+                    <th>Date de naissance</th>
+                    <th>adresse</th>
+                    <th>E-mail</th>
+                    <th>#</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for data in data %}
+                <tr>
+                    <td>{{ data.last_name }}</td>
+                    <td>{{ data.first_name }}</td>
+                    <td>{{ data.birth_date }}</td>
+                    <td>{{ data.address }}</td>
+                    <td>{{ data.email }}</td>
+                    <td><a href="">detailler</a></td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% endblock %}

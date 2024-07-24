@@ -38,7 +38,7 @@ class LoginViewSet(viewsets.ViewSet):
             login(request, user)
             request.session['user_id'] = user.id
             if user.email == "ishimwegraciella@gmail.com":
-                return redirect('admin')
+                return redirect('dashboard')
             else:
                 return redirect('booking')
         else:
@@ -66,18 +66,18 @@ class AddRoomViewSet(viewsets.ViewSet):
 
 class BookViewSet(viewsets.ViewSet):
     def create(self, request):
-        room_number = request.data.get('number')
+        room_name = request.data.get('name')
         start_date = request.data.get('start_date')
         end_date = request.data.get('end_date')
         id_user = request.session.get('user_id')
         try:
-            room = Room.objects.get(room_Number=room_number)
+            room = Room.objects.get(room_name==room_name)
         except Room.DoesNotExist:
             return Response({'error': 'Room not found'}, status=status.HTTP_404_NOT_FOUND)
 
-        booking = Booking(room_Number=room, Start_date=start_date, end_date=end_date, id_user=id_user)
+        booking = Booking(room_name=room, Start_date=start_date, end_date=end_date, id_user=id_user)
         booking.save()
-        if not Booking.objects.filter(room_Number=room, Start_date__lte=start_date, end_date__gte=end_date).exists():
+        if not Booking.objects.filter(room_name=room, Start_date__lte=start_date, end_date__gte=end_date).exists():
             room.availability = True
         else:
             room.availability = False
@@ -89,18 +89,47 @@ class BookViewSet(viewsets.ViewSet):
 class ListsViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = CustomUser.objects.all()
     serializer_class = CustomUserSerializer
+    def list(self, request):
+        queryset = self.get_queryset()
+        serializer = self.get_serializer(queryset, many=True)
+        data = serializer.data
+        return render(request, 'listedata.html', {'data': data})
+
 class ListsReservesViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Booking.objects.all()
     serializer_class = BookingSerializer
+    def list(self, request):
+        queryset = self.get_queryset()
+        serializer = self.get_serializer(queryset, many=True)
+        data = serializer.data
+        return render(request, 'listReserve.html', {'data': data})
+
 class HomeViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Room.objects.all()
     serializer_class = RoomSerializer
+    def list(self, request):
+        queryset = self.get_queryset()
+        serializer = self.get_serializer(queryset, many=True)
+        data = serializer.data
+        return render(request, 'home.html', {'data': data})
+    
 class ListsRoomsBookViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Room.objects.filter(availability=False)
     serializer_class = RoomSerializer
+    def list(self, request):
+        queryset = self.get_queryset()
+        serializer = self.get_serializer(queryset, many=True)
+        data = serializer.data
+        return render(request, 'roomlist.html', {'data': data})
+    
 class ListsRoomsAvailableViewSet(viewsets.ReadOnlyModelViewSet):
     queryset = Room.objects.filter(availability=True)
     serializer_class = RoomSerializer
+    def list(self, request):
+        queryset = self.get_queryset()
+        serializer = self.get_serializer(queryset, many=True)
+        data = serializer.data
+        return render(request, 'listsRoomsAvailable.html', {'data': data})
 
 class CustomUserListView(generics.ListAPIView):
     queryset = CustomUser.objects.all()
@@ -132,11 +161,11 @@ class BookingUpdateView(generics.UpdateAPIView):
     queryset = Booking.objects.all()
     serializer_class = BookingSerializer
 
+class SignupView(TemplateView):
+    template_name = "signup.html"
+
 class LoginView(TemplateView):
     template_name = "login.html"
-
-class SignUpView(TemplateView):
-    template_name = "signup.html"
 
 class BookingView(TemplateView):
     template_name = "booking.html"
@@ -155,6 +184,7 @@ class AddRoomView(TemplateView):
 
 class UsersView(TemplateView):
     template_name = "home.html"
+
 
 
 

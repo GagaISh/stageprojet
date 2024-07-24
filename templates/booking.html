@@ -1,29 +1,20 @@
-<!DOCTYPE html>
-<html lang="fr">
-    {% load static %}
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Réservation</title>
-    <link rel="stylesheet" href="{% static  'main.css'  %}"/>
-</head>
-<body class="reservation">
-    <div class="container_reservation">
-        <h1>Réservation</h1>
-        <form method="post" action="{% url 'reserver' %}">
-            {% csrf_token %}
-            {{ form.as_p }}
-            <label for="nom_salle">Nom de la salle:</label>
-            <input type="text" id="nom_salle" name="nom_salle" required>
+{% extends "base.html" %}
+    {% block content %}
+        <div class="container_reservation">
+            <h1>Réservation</h1>
+            <form method="post" action="{% url 'booking' %}">
+                {% csrf_token %}
+                {{ form.as_p }}
+                <label for="nom_salle">Nom de la salle:</label>
+                <input type="text" id="nom_salle" name="nom_salle" required>
 
-            <label for="dateDebutReunion">Date de début de la réunion:</label>
-            <input type="datetime-local" id="dateDebutReunion" name="datedebut" required>
+                <label for="dateDebutReunion">Date de début de la réunion:</label>
+                <input type="datetime-local" id="dateDebutReunion" name="datedebut" required>
 
-            <label for="dateFinReunion">Date de fin de la réunion:</label>
-            <input type="datetime-local" id="dateFinReunion" name="datefin" required>
+                <label for="dateFinReunion">Date de fin de la réunion:</label>
+                <input type="datetime-local" id="dateFinReunion" name="datefin" required>
 
-            <button type="submit">Valider la réservation</button>
-        </form>
-    </div>
-</body>
-</html>
+                <button type="submit">Valider la réservation</button>
+            </form>
+        </div>
+    {% endblock %}

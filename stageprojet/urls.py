@@ -20,8 +20,10 @@ from reservation.views import *
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
 
 urlpatterns = [
-     path('admin/', admin.site.urls),
+    path('admin/', admin.site.urls),
+    path('', HomeViewSet.as_view({'get': 'list'}), name='home'),
     path('api/', include('reservation.urls')),
+    path('api/',include ('reservation.api'))
 ]
 urlpatterns += staticfiles_urlpatterns()
 
