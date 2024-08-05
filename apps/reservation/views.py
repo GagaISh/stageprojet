@@ -8,6 +8,8 @@ from django.urls import reverse
 from django.views import View
 from django.views.generic import TemplateView
 from django.views.generic.edit import FormView
+from django.utils import timezone
+import zoneinfo
 
 from apps.reservation.models import Booking, CustomUser, Room
 from .api import CustomUsersListAPIView,RoomAvailableListAPIView,RoomReserveListAPIView
@@ -111,27 +113,30 @@ class BookingView(View):
     template_name = "booking.html"
 
     def post(self, request):
-        room_name = request.POST.get("room_name")
-        start_date = request.POST.get("start_date")
-        end_date = request.POST.get("end_date")
         id_user = request.session.get("user_id")
         id_room = request.POST.get("room_id")
-
-        print(f"Retrieved id_room: {id_room}")
+        room_name = request.POST.get("room_name")
+        start_date= request.POST.get("start_date")
+        end_date = request.POST.get("end_date")
 
         try:
-            id_room = int(id_room)
-        except (TypeError, ValueError):
-            return HttpResponseBadRequest("Invalid room ID")
+            room = Room.objects.get(room_name=room_name)
+            id_room = room.id
+        except Room.DoesNotExist:
+            return HttpResponseBadRequest("Room name not found")
+        
+        print(f"Retrieved id_room: {id_room}")
+        print(f"Retrieved id_user: {id_user }")
 
         custom_user = get_object_or_404(CustomUser, id=id_user)
         room = get_object_or_404(Room, id=id_room)
         response = Booking(
+            id_user=custom_user,
+            id_room=room,
             room_name=room_name,
             start_date=start_date,
             end_date=end_date,
-            id_user=custom_user,
-            id_room=room,
+            
         )
         response.save()
 
@@ -178,12 +183,7 @@ class ListUsersView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        api_view = CustomUsersListAPIView.as_view()
-        response = api_view(self.request)
-        if response.status_code == 200:
-            context["datas"] = response.data
-        else:
-            context["error"] = response.data
+        context["datas"] = CustomUser.objects.order_by('id')
         return context
 
 
@@ -192,12 +192,7 @@ class ListReservesView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        api_view = RoomReserveListAPIView.as_view()
-        response = api_view(self.request)
-        if response.status_code == 200:
-            context["datas"] = response.data
-        else:
-            context["error"] = response.data
+        context["datas"] = Booking.objects.filter(id_room__availability=False).select_related('id_room', 'id_user')
         return context
 
 
@@ -206,10 +201,5 @@ class ListAvailableView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        api_view = RoomAvailableListAPIView.as_view()
-        response = api_view(self.request)
-        if response.status_code == 200:
-            context["datas"] = response.data
-        else:
-            context["error"] = response.data
+        context["datas"] = Room.objects.filter(availability=True)
         return context

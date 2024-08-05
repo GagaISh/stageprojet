@@ -15,6 +15,8 @@
     <table>
         <thead>
             <tr>
+                <th>Id Client</th>
+                <th>Id Salle</th>
                 <th>Nom de la sallle</th>
                 <th>Date Debut</th>
                 <th>Date Fin</th>
@@ -23,13 +25,13 @@
         </thead>
         <tbody>
 
-            {% for data in datas %}
+            {% for booking in datas %}
             <tr>
-                <td>{{ data.room_name }}</td>
-                <td>{{ data.start_date }}</td>
-                <td>{{ data.end_date }}</td>
-                <td>{{ data.id_user }}</td>
-                <td>{{ data.id_room }}</td>
+                <td>{{ booking.id_user.id }}</td>
+                <td>{{ booking.id_room.id }}</td>
+                <td>{{ booking.room_name }}</td>
+                <td>{{ booking.start_date }}</td>
+                <td>{{ booking.end_date }}</td>
                 <td><a href="">detailler</a></td>
             </tr>
             {% endfor %}
