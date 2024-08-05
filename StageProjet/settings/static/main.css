@@ -1,0 +1,249 @@
+.home {
+    font-family: sans-serif;
+    background-image: url(images/image4.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.container_home {
+    width: 400px;
+    margin: 0 auto;
+    font-weight: bold;
+    color:white;
+    font-size: 22px;
+    text-align: center;
+    margin-top: 150px;
+
+}
+.signup {
+    font-family: sans-serif;
+    background-image: url(images/14.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.container_signup {
+    width: 400px;
+    margin: 0 auto;
+    padding: 15px;
+    border: 1px solid #ccc;
+    font-weight: bold;
+    color:white;
+
+}
+.login {
+    font-family: sans-serif;
+    background-image: url(images/images2.jpeg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.container_login {
+    width: 400px;
+    height: 300px;
+    margin: 0 auto;
+    padding: 15px;
+    border: 1px solid #ccc;
+    font-weight: bold;
+    color:black;
+
+}
+.booking {
+    font-family: sans-serif;
+    background-image: url(images/images5.jpg);
+    background-size: cover;
+    background-repeat: no-repeat;
+    background-position: center;
+}
+
+.container_booking {
+    width: 400px;
+    margin: 0 auto;
+    padding: 15px;
+    border: 1px solid #ccc;
+    font-weight: bold;
+    color:black;
+    font-size: 16px;
+}
+.board {
+    font-family: sans-serif;
+    background-color: rgb(233, 252, 246);
+}
+.add {
+    font-family: sans-serif;
+}
+
+.container_add {
+    width: 600px;
+    margin: 0 auto;
+    padding: 15px;
+    border: 1px solid #ccc;
+    font-weight: bold;
+    color:white;
+    background-color:aquamarine
+
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+    background-color: #4CAF50;
+    margin-top: 15px;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="date"],
+input[type="tel"],
+input[type="password"] {
+    width: 100%;
+    padding: 8px;
+    margin-bottom: 15px;
+    border: 1px solid #ccc;
+}
+input{
+    font-weight: bold;
+    font-size: 15px;
+}
+button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+
+}
+
+
+header {
+    padding: 10px;
+}
+
+nav {
+    text-align: center;
+    word-spacing: 4em;
+    font-weight: bold;
+    font-size: 18px;
+    color: white;
+}
+
+nav ul {
+    list-style: none;
+    margin: 10;
+    padding: 0;
+}
+
+nav li {
+    display: inline-block;
+    margin-right: 20px;
+}
+
+nav a {
+    text-decoration: none;
+    color: #333;
+}
+
+body {
+    font-family: sans-serif;
+    height: 100vh;
+}
+
+h1 {
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+form {
+    width: 300px;
+    margin: 0 auto;
+    padding: 20px;
+    border: 1px solid #ccc;
+}
+
+label {
+    display: block;
+    margin-bottom: 5px;
+}
+
+input[type="text"],
+input[type="number"] {
+    width: 100%;
+    padding: 8px;
+    border: 1px solid #ccc;
+}
+
+button {
+    background-color: #4CAF50;
+    color: white;
+    padding: 10px 20px;
+    border: none;
+    cursor: pointer;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    font-family: Arial, sans-serif;
+
+  }
+
+  th, td {
+    padding: 10px;
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+  }
+
+  th {
+    background-color: #f2f2f2;
+  }
+
+  tr:hover {
+    background-color: #f5f5f5;
+  }
+
+.main-content {
+    margin-left: 20px;
+    padding: 20px;
+}
+
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+  }
+
+  .sidebar {
+    width: 200px;
+    background-color: #f1f1f1;
+    height: 100%;
+    position: fixed;
+    z-index: 1;
+    top: 0;
+    left: 0;
+    overflow-x: hidden;
+    padding-top: 20px;
+  }
+
+  .sidebar a {
+    padding: 6px 8px 6px 16px;
+    text-decoration: none;
+    font-size: 16px;
+    color: #818181;
+    display: block;
+  }
+
+  .sidebar a:hover {
+    color: #333;
+  }
+
+  .main {
+    margin-left: 200px;
+    padding: 0px 10px;
+  }

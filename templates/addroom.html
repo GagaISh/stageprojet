@@ -1,0 +1,51 @@
+{% extends 'base.html' %}
+{% block main_content %}
+
+<!DOCTYPE html>
+<html lang="fr">
+    {% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Ajouter une salle</title>
+    <link rel="stylesheet" href="{% static "main.css" %}">
+</head>
+<body class="add">
+    <div class="container_add">
+    <h1>Ajouter une salle</h1>
+    <form method="post" action="{% url 'addroom' %}" enctype="multipart/form-data">
+        {% csrf_token %}
+        <label for="room_name">Nom de la salle:</label>
+        <input type="text" id="room_name" name="room_name" required>
+
+        <label for="place">Lieu:</label>
+        <input type="text" id="place" name="place" required>
+
+        <label for="capacity">Capacité:</label>
+        <input type="number" id="capacity" name="capacity" required>
+
+        <label for="price">Prix:</label>
+        <input type="number" id="price" name="price" required>
+
+        <label for="Image">Image:</label>
+        <input type="file" id="image" name="image" accept="image/*" onchange="previewImage(this)">
+        <img id="image-preview" src="#" alt="Aperçu de l'image" style="max-width: 200px; display: none;">
+        <button type="submit">Ajouter</button>
+
+    </form>
+
+<script>
+    function previewImage(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function (e) {
+                document.getElementById('image-preview').src = e.target.result;
+                document.getElementById('image-preview').style.display = 'block';
+            };
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+</script>
+</body>
+</html>
+{% endblock %}

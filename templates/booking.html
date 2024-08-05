@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="fr">
+    {% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Booking</title>
+    <link rel="stylesheet" href="{% static  'main.css'  %}"/>
+</head>
+<body class="booking">
+    <div class="container_booking">
+        <h1>Réservation</h1>
+        <form method="post" action="{% url 'booking' %}">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <label for="room_name">Nom de salle:</label>
+            <input type="text" id="room_name" name="room_name" required>
+
+            <label for="start_date">Date de début de la réunion:</label>
+            <input type="datetime-local" id="start_date" name="start_date" required>
+
+            <label for="end_date">Date de fin de la réunion:</label>
+            <input type="datetime-local" id="end_date" name="end_date" required>
+
+            <input type="hidden" id="room_id" name="room_id" value="{{ room_id }}">
+
+            <button type="submit">Valider la réservation</button>
+        </form>
+    </div>
+</body>
+</html>

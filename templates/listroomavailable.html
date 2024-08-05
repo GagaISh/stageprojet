@@ -1,0 +1,46 @@
+
+{% extends 'base.html' %}
+
+{% block main_content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{% static 'main.css' %}">
+</head>
+<body>
+    <h2>Liste des salles disponible</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>#</th>
+                <th>Nom</th>
+                <th>lieu</th>
+                <th>capacite</th>
+                <th>prix</th>
+                <th>image</th>
+                <th>disponibilite</th>
+                <th>#</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for data in datas %}
+            <tr>
+                <td>{{ data.id }}</td>
+                <td>{{ data.room_name }}</td>
+                <td>{{ data.place }}</td>
+                <td>{{ data.capacity }}</td>
+                <td>{{ data.price }}</td>
+                <td>{{ data.image }}</td>
+                <td>{{ data.availability }}</td>
+                <td><a href="">detailler</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
+{% endblock %}

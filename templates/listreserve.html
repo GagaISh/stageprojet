@@ -1,0 +1,40 @@
+
+{% extends 'base.html' %}
+
+{% block main_content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    {% load static %}
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{% static 'main.css' %}">
+</head>
+    <h2>Les salles reservees</h2>
+    <table>
+        <thead>
+            <tr>
+                <th>Nom de la sallle</th>
+                <th>Date Debut</th>
+                <th>Date Fin</th>
+                <th>#</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            {% for data in datas %}
+            <tr>
+                <td>{{ data.room_name }}</td>
+                <td>{{ data.start_date }}</td>
+                <td>{{ data.end_date }}</td>
+                <td>{{ data.id_user }}</td>
+                <td>{{ data.id_room }}</td>
+                <td><a href="">detailler</a></td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</body>
+</html>
+{% endblock %}

@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+    {% load static %}
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="{% static 'main.css' %}">
+</head>
+<body class="board">
+     <div >
+    {% block content %}
+    <div class="container_board">
+        <header>
+            <div>
+            <h1>Administration</h1>
+           </div>
+        </header>
+    <div class="sidebar">
+        <ul class="sider">
+            <li><a href="{% url 'list-users' %}">Liste des utilisateurs</a></li>
+            <li><a href="{% url 'addroom' %}">Ajouter une salle</a></li>
+            <li><a href="{% url 'room-reserves' %}">Salles réservées</a></li>
+            <li><a href="{% url 'roomsavailable' %}">Salles disponibles</a></li>
+        </ul>
+    </div>
+    <div class="main">
+        {% block main_content %}{% endblock %}
+      </div>
+  {% endblock %}
+</div>
+</body>
+</html>
