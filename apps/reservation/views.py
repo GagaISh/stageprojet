@@ -8,14 +8,11 @@ from django.urls import reverse
 from django.views import View
 from django.views.generic import TemplateView
 from django.views.generic.edit import FormView
-from rest_framework import generics
-from rest_framework.response import Response
 
 from apps.reservation.models import Booking, CustomUser, Room
+from .api import CustomUsersListAPIView,RoomAvailableListAPIView,RoomReserveListAPIView
 
 from .forms import SignUpForm
-from .serializers import CustomUserSerializer, RoomSerializer
-
 
 class SignupView(FormView):
     template_name = "signup.html"
@@ -147,17 +144,16 @@ class BookingView(View):
         return render(request, self.template_name, {"form": "form"})
 
 
-class RoomAvailableListView(View):
-    def get(self, request):
-        api_view = RoomAvailableListAPIView.as_view()
-        response = api_view(request)
+# class RoomAvailableListView(View):
+#    def get(self, request):
+#       api_view = RoomAvailableListAPIView.as_view()
+#        response = api_view(request)
 
-        if response.status_code == 200:
-            return render(request, "listreserve.html", {"datas": response.data})
+#        if response.status_code == 200:
+#            return render(request, "listreserve.html", {"datas": response.data})
 
-        else:
-            return Response(response.data, status=response.status_code)
-
+#        else:
+#            return Response(response.data, status=response.status_code)
 
 class HomeView(View):
     def get(self, request):
@@ -177,27 +173,12 @@ class ListRoomView(TemplateView):
         return context
 
 
-class UsersListAPIView(generics.ListCreateAPIView):
-    queryset = CustomUser.objects.all()
-    serializer_class = CustomUserSerializer
-
-
-class RoomReserveListAPIView(generics.ListCreateAPIView):
-    queryset = Room.objects.filter(availability=False)
-    serializer_class = RoomSerializer
-
-
-class RoomAvailableListAPIView(generics.ListCreateAPIView):
-    queryset = Room.objects.filter(availability=True)
-    serializer_class = RoomSerializer
-
-
 class ListUsersView(TemplateView):
     template_name = "listusers.html"
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        api_view = UsersListAPIView.as_view()
+        api_view = CustomUsersListAPIView.as_view()
         response = api_view(self.request)
         if response.status_code == 200:
             context["datas"] = response.data
