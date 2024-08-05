@@ -148,18 +148,6 @@ class BookingView(View):
     def get(self, request):
         return render(request, self.template_name, {"form": "form"})
 
-
-# class RoomAvailableListView(View):
-#    def get(self, request):
-#       api_view = RoomAvailableListAPIView.as_view()
-#        response = api_view(request)
-
-#        if response.status_code == 200:
-#            return render(request, "listreserve.html", {"datas": response.data})
-
-#        else:
-#            return Response(response.data, status=response.status_code)
-
 class HomeView(View):
     def get(self, request):
         return render(request, "home.html")
