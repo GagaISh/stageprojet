@@ -1,6 +1,7 @@
 import os
 
 from django.contrib.auth import authenticate, login
+from django.contrib.auth.decorators import login_required
 from django.core.files.storage import default_storage
 from django.http import HttpResponse, HttpResponseBadRequest
 from django.shortcuts import get_object_or_404, redirect, render
