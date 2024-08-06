@@ -87,6 +87,22 @@
 
 }
 
+.container_listroom {
+    display: flex;
+    justify-content: flex-end;
+    align-items: center;
+    margin-bottom: 20px;
+  }
+  
+  .container_listroom h2 {
+
+    margin: 0; 
+  }
+  
+  .container_listroom button {
+    background-color: aqua;
+  }
+
 h1 {
     text-align: center;
     margin-bottom: 20px;

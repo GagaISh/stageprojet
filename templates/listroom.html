@@ -12,7 +12,10 @@
     <link rel="stylesheet" href="{% static 'main.css' %}">
 </head>
 <body>
-    <h2>Liste des salles</h2>
+    <div class="container_listroom">
+        <h2>Liste des salles</h2>
+        <a href="{% url 'addroom' %}"><button>Ajouter une salle</button></a>
+      </div>
     <table>
         <thead>
             <tr>

@@ -71,6 +71,7 @@ class LoginView(View):
             error_message = "Incorrect identifiers"
 
         return render(request, "login.html", {"error": error_message})
+    
 
 class AddRoomView(View):
     template_name = "addroom.html"
@@ -145,7 +146,6 @@ class HomeView(View):
     def get(self, request):
         return render(request, "home.html")
 
-
 def dashboard(request):
     return render(request, "dashboard.html")
 
@@ -155,7 +155,7 @@ class ListRoomView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["datas"] = Room.objects.all()
+        context["datas"] = Room.objects.order_by('id')
         return context
 
 
