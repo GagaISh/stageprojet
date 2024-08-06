@@ -1,4 +1,4 @@
 .env/
 local_settings.py
-django-venv/
-pgadmin4/
+django-venv
+pgadmin4
