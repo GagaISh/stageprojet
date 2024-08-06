@@ -8,11 +8,8 @@ from django.urls import reverse
 from django.views import View
 from django.views.generic import TemplateView
 from django.views.generic.edit import FormView
-from django.utils import timezone
-import zoneinfo
 
 from apps.reservation.models import Booking, CustomUser, Room
-from .api import CustomUsersListAPIView,RoomAvailableListAPIView,RoomReserveListAPIView
 
 from .forms import SignUpForm
 
@@ -58,27 +55,22 @@ class LoginView(View):
         password = request.POST.get("password")
         if email is not None:
             email = email.lower()
+
         try:
             user = CustomUser.objects.get(email=email)
-        except CustomUser.DoesNotExist:
-            user = None
-
-        if user is None:
-            user = authenticate(request, email=email, password=password)
-
-        if user is not None:
-            login(request, user)
-            request.session["user_id"] = user.id
-
-            if user.email == "ishimwegraciella@gmail.com":
-                return redirect("admin")
+            if user.check_password(password):
+                login(request, user)
+                request.session["user_id"] = user.id
+                if user.email == "ishimwegraciella@gmail.com":
+                    return redirect("admin")
+                else:
+                    return redirect("booking")
             else:
-                return redirect("booking")
-        else:
+                error_message = "Incorrect identifiers"
+        except CustomUser.DoesNotExist:
             error_message = "Incorrect identifiers"
-            print(f"Login failed: {error_message}")
-            return render(request, "login.html", {"error": error_message})
 
+        return render(request, "login.html", {"error": error_message})
 
 class AddRoomView(View):
     template_name = "addroom.html"
@@ -143,10 +135,11 @@ class BookingView(View):
         room.availability = False
         room.save()
 
-        return redirect("room-reserves")
+        return redirect("home")
 
     def get(self, request):
         return render(request, self.template_name, {"form": "form"})
+
 
 class HomeView(View):
     def get(self, request):

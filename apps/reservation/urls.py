@@ -22,9 +22,6 @@ urlpatterns = [
     path('list-users/', ListUsersView.as_view(), name='list-users'),
     path('room-reserves/', ListReservesView.as_view(), name='room-reserves'),
     path('roomsavailable/', ListAvailableView.as_view(), name='roomsavailable'),
-    path('api/users/', CustomUsersListAPIView.as_view(), name='users'),
-    path('api/RoomReserveList/',RoomReserveListAPIView.as_view(),name='api/RoomReserveList/'),
-    path('api/RoomAvailableList/',RoomAvailableListAPIView.as_view(),name='api/RoomAvailableList/'),
     
 ]   
     
