@@ -1,21 +1,21 @@
-<!DOCTYPE html>
-<html lang="fr">
-    {% load static %}
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SignUp</title>
-    <link rel="stylesheet" href="{% static 'main.css' %}" />
-</head>
-<body class="signup">
-    <div class="container_signup">
-        <h1>Inscription</h1>
-        <form method="post" action="{% url 'signup' %}">
-            {% csrf_token %}
-            {{ form.as_p }}
-
-            <button type="submit">S'inscrire</button>
-        </form>
+{% extends 'base.html' %}
+{% block content %}
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-md-6">
+                <div class="card">
+                    <div class="card-header">
+                        <h1 class="card-title">Inscription</h1>
+                    </div>
+                    <div class="card-body">
+                        <form method="post" action="{% url 'signup' %}">
+                            {% csrf_token %}
+                            {{ form.as_p }}
+                            <button type="submit" class="btn btn-primary">S'inscrire</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-</body>
-</html>
+{% endblock %}

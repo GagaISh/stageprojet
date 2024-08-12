@@ -1,33 +1,57 @@
 <!DOCTYPE html>
 <html lang="en">
-    {% load static %}
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="{% static 'main.css' %}">
+    <title>Systeme de Reservation de la salle de reunion</title>
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <style>
+        .bg-darkcyan {
+            background-color: darkcyan !important;
+        }
+    </style>
+    {% block extra_head %}
+    {% endblock %}
 </head>
-<body class="board">
-     <div >
-    {% block content %}
-    <div class="container_board">
-        <header>
-            <div>
-            <h1>Administration</h1>
-           </div>
-        </header>
-    <div class="sidebar">
-        <ul class="sider">
-            <li><a href="{% url 'list-users' %}">Liste des utilisateurs</a></li>
-            <li><a href="{% url 'listroom' %}">Listes des Salles</a></li>
-            <li><a href="{% url 'room-reserves' %}">Salles réservées</a></li>
-            <li><a href="{% url 'roomsavailable' %}">Salles disponibles</a></li>
-        </ul>
-    </div>
-    <div class="main">
-        {% block main_content %}{% endblock %}
-      </div>
-  {% endblock %}
-</div>
+<body>
+    <<header>
+        <nav class="navbar navbar-expand-lg navbar-dark bg-darkcyan fixed-top">
+            <a href="{% url 'home' %}" class="navbar-brand">SRS</a>
+            <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
+            <div class="collapse navbar-collapse" id="navbarNav">
+                <ul class="navbar-nav ml-auto">
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'home' %}">Accueil</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="{% url 'home' %}#services-section">Services</a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="">Contact</a>
+                    </li>
+                </ul>
+            </div>
+        </nav>
+    </header>
+
+    <main>
+        <div class="container my-5">
+            {% block content %}
+            {% endblock %}
+        </div>
+    </main>
+
+    <footer class="bg-darkcyan text-white py-3 mt-5">
+        <div class="container">
+            <p class="mb-0">&copy; 2024 SRS Site</p>
+        </div>
+    </footer>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+    {% block extra_scripts %}
+    {% endblock %}
 </body>
 </html>

@@ -27,3 +27,4 @@ class RoomReserveListAPIView(generics.ListCreateAPIView):
 class RoomAvailableListAPIView(generics.ListCreateAPIView):
     queryset = Room.objects.filter(availability=True)
     serializer_class = RoomSerializer
+

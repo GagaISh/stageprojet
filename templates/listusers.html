@@ -1,18 +1,7 @@
 
-{% extends 'base.html' %}
+{% extends 'dashboard.html' %}
 
 {% block main_content %}
-
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    {% load static %}
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <link rel="stylesheet" href="{% static 'main.css' %}">
-</head>
-<body>
     <div class="main">
         <h2>Liste des utilisateurs</h2>
         <table>
@@ -22,6 +11,7 @@
                     <th>Nom</th>
                     <th>Prenom</th>
                     <th>Date de naissance</th>
+                    <th>Telephone</th>
                     <th>adresse</th>
                     <th>E-mail</th>
                 </tr>
@@ -33,6 +23,7 @@
                     <td>{{ data.last_name }}</td>
                     <td>{{ data.first_name }}</td>
                     <td>{{ data.birth_date }}</td>
+                    <td>{{ data.telephone }}</td>
                     <td>{{ data.address }}</td>
                     <td>{{ data.email }}</td>
                 </tr>
@@ -41,6 +32,4 @@
         </table>
 
     </div>
-</body>
-</html>
 {% endblock %}

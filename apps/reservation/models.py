@@ -1,6 +1,6 @@
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.db import models
-
+from django.contrib.auth.models import User
 
 class CustomUserManager(BaseUserManager):
     def create_user(self, email, password, **extra_fields):
@@ -60,10 +60,21 @@ class Room(models.Model):
     image = models.ImageField(upload_to="images", null=True, blank=True)
     availability = models.BooleanField(default=True)
 
+    def is_available(self, start_date, end_date):
+        bookings = Booking.objects.filter(
+            id_room=self,
+            start_date__lte=end_date,
+            end_date__gte=start_date
+        )
+        return not bookings.exists()
+    def delete(self, *args, **kwargs):
+        Booking.objects.filter(id_room=self).delete()
+        super().delete(*args, **kwargs)
+
 
 class Booking(models.Model):
-    id_room = models.ForeignKey("reservation.Room", on_delete=models.CASCADE)
-    id_user = models.ForeignKey("reservation.CustomUser", on_delete=models.CASCADE)
+    id_user = models.ForeignKey("reservation.CustomUser", on_delete=models.CASCADE, related_name="bookings")
+    id_room = models.ForeignKey("reservation.Room", on_delete=models.CASCADE, related_name="bookings")
     room_name = models.CharField(max_length=100)
-    start_date = models.DateTimeField()
-    end_date = models.DateTimeField()
+    start_date = models.DateField()
+    end_date = models.DateField()

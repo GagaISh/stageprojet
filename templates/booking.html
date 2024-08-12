@@ -1,30 +1,43 @@
-<!DOCTYPE html>
-<html lang="fr">
-    {% load static %}
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Booking</title>
-    <link rel="stylesheet" href="{% static  'main.css'  %}"/>
-</head>
-<body class="booking">
-    <div class="container_booking">
-        <h1>Réservation</h1>
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="d-flex flex-column min-vh-100" style="min-height: 70vh;">
+    <div class="container my-5 flex-grow-1">
+        <h1 class="mb-4 text-center">Réservation</h1>
         <form method="post" action="{% url 'booking' %}">
+            {% if error %}
+            <div class="alert alert-danger">{{ error }}</div>
+            {% endif %}
             {% csrf_token %}
             {{ form.as_p }}
-            <label for="room_name">Nom de salle:</label>
-            <input type="text" id="room_name" name="room_name" required>
-
-            <label for="start_date">Date de début de la réunion:</label>
-            <input type="datetime-local" id="start_date" name="start_date" required>
-
-
-            <label for="end_date">Date de fin de la réunion:</label>
-            <input type="datetime-local" id="end_date" name="end_date" required>
-
-            <button type="submit">Valider la réservation</button>
+            <div class="form-group">
+                <label for="last_name">Nom:</label>
+                <input type="text" class="form-control" id="last_name" name="last_name" value="{{ user.last_name }}" required>
+            </div>
+            <div class="form-group">
+                <label for="first_name">Prenom:</label>
+                <input type="text" class="form-control" id="first_name" name="first_name" value="{{ user.first_name }}" required>
+            </div>
+            <div class="form-group">
+                <label for="email">Email:</label>
+                <input type="email" class="form-control" id="email" name="email" value="{{ user.email }}" required>
+            </div>
+            <div class="form-group">
+                <label for="room_name">Nom de salle:</label>
+                <input type="text" class="form-control" id="room_name" name="room_name" required>
+            </div>
+            <div class="form-group">
+                <label for="start_date">Date de début de la réunion:</label>
+                <input type="date" class="form-control" id="start_date" name="start_date" required>
+            </div>
+            <div class="form-group">
+                <label for="end_date">Date de fin de la réunion:</label>
+                <input type="date" class="form-control" id="end_date" name="end_date" required>
+            </div>
+            <button type="submit" class="btn btn-primary">Valider la réservation</button>
         </form>
     </div>
-</body>
-</html>
+    {% include 'partials/footer.html' %}
+</div>
+
+{% endblock %}

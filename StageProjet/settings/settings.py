@@ -43,8 +43,16 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "apps.reservation.apps.ReservationConfig",
     "rest_framework",
+    "django.contrib.humanize",
+    "django_filters",
+    "fontawesome_5",
 ]
-
+REST_FRAMEWORK={
+    'DEFAULT_FILTER_BACKENDS':[
+        'django_filters.rest_framework.DjangoFilterBackend',
+        'rest_framework.filters.SearchFilter',
+    ]
+}
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -57,6 +65,8 @@ MIDDLEWARE = [
 ]
 
 ROOT_URLCONF = "StageProjet.urls"
+MEDIA_ROOT = os.path.join(BASE_DIR,"media")
+MEDIA_URL = "/media/"
 
 
 
@@ -135,6 +145,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
+#MEDIA_ROOT = os.path.join(BASE_DIR, 'StageProjet/settings/static/images')
 STATICFILES_DIRS = (os.path.join(os.path.dirname(__file__), "static"),)
 STATICFILES_FINDERS = (
     "django.contrib.staticfiles.finders.FileSystemFinder",
