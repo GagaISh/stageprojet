@@ -118,7 +118,7 @@ class BookingView(View):
                 'last_name': user.last_name,
                 'first_name': user.first_name,
                 'email': user.email,
-                #'room_name': '',  # Set an empty string for room_name
+                'room_name': '',
             }
 
         return render(request, self.template_name, {'initial_data': initial_data})
