@@ -5,19 +5,19 @@
         <form method="post" action="{% url 'addroom' %}" enctype="multipart/form-data" class="form-group">
             {% csrf_token %}
             <div class="form-group">
-                <label for="room_name">Nom de la salle:</label>
+                <label for="room_name">Room Name:</label>
                 <input type="text" id="room_name" name="room_name" class="form-control" required>
             </div>
             <div class="form-group">
-                <label for="place">Lieu:</label>
+                <label for="place">Place:</label>
                 <input type="text" id="place" name="place" class="form-control" required>
             </div>
             <div class="form-group">
-                <label for="capacity">Capacité:</label>
+                <label for="capacity">Capacity:</label>
                 <input type="number" id="capacity" name="capacity" class="form-control" required>
             </div>
             <div class="form-group">
-                <label for="price">Prix:</label>
+                <label for="price">Price:</label>
                 <input type="number" id="price" name="price" class="form-control" required>
             </div>
             <div class="form-group">
@@ -25,7 +25,7 @@
                 <input type="file" id="image" name="image" accept="image/*" onchange="previewImage(this)" class="form-control-file">
                 <img id="image-preview" src="#" alt="Aperçu de l'image" class="img-fluid mt-2" style="max-width: 200px; display: none;">
             </div>
-            <button type="submit" class="btn btn-primary">Ajouter</button>
+            <button type="submit" class="btn btn-primary">Add</button>
         </form>
     </div>
 

@@ -7,17 +7,17 @@
 {% load fontawesome_5 %}
 
 <div class="container-fluid container_listroom">
-  <h2>Liste des salles</h2>
+  <h2>List Rooms</h2>
 
   <div class="row">
     <div class="col-md-12">
       <form action="" method="GET" class="form-inline filter_room-form" enctype="multipart/form-data">
         <select name="availability" id="availability" class="form-control mr-2">
-          <option value="Tous">Tous</option>
-          <option value="True">Disponible</option>
-          <option value="False">Non disponible</option>
+          <option value="Tous">All</option>
+          <option value="True">Available</option>
+          <option value="False">Not available</option>
         </select>
-        <button type="submit" name="btn_filter" class="btn btn-primary">Filtrer</button>
+        <button type="submit" name="btn_filter" class="btn btn-primary">Filter</button>
       </form>
     </div>
   </div>
@@ -26,14 +26,14 @@
     <div class="col-md-12">
       <form action="" method="GET" class="form-inline search_room-form">
         <input type="search" placeholder="search" name="search" class="form-control mr-2" />
-        <button type="submit" name="btn_SearchRoom" class="btn btn-primary">Rechercher</button>
+        <button type="submit" name="btn_SearchRoom" class="btn btn-primary">Search</button>
       </form>
     </div>
   </div>
 
   <div class="row">
     <div class="col-md-12">
-      <a href="{% url 'addroom' %}"><button type="submit" id="btnAddRoom" class="btn btn-success">Ajouter une salle</button></a>
+      <a href="{% url 'addroom' %}"><button type="submit" id="btnAddRoom" class="btn btn-success">Add Room</button></a>
     </div>
   </div>
 
@@ -46,12 +46,12 @@
 <table class="table table-striped">
   <thead>
     <tr>
-      <th>Nom</th>
-      <th>lieu</th>
-      <th>capacite</th>
-      <th>prix</th>
+      <th>Room Name</th>
+      <th>Place</th>
+      <th>Capacity</th>
+      <th>Price</th>
       <th>image</th>
-      <th>disponibilite</th>
+      <th>Availability</th>
       <th>Actions</th>
     </tr>
   </thead>
@@ -77,8 +77,8 @@
         {% endif %}
       </td>
       <td>
-        <a href="{% url 'update_room' data.id %}"><button type="button" name="btn_update" class="btn btn-primary btn-update">Modifier</button></a>
-        <button type="button" name="btn-delete" value="{{ data.id}}" class="btn btn-danger">Supprimer</button>
+        <a href="{% url 'update_room' data.id %}"><button type="button" name="btn_update" class="btn btn-primary btn-update">UPDATE</button></a>
+        <button type="button" name="btn-delete" value="{{ data.id}}" class="btn btn-danger">DELETE</button>
       </td>
     </tr>
     {% endfor %}

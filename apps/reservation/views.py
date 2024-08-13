@@ -5,8 +5,9 @@ from django.contrib.auth import authenticate, login,logout
 from django.contrib import messages
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
 from django.core.files.storage import default_storage
-from django.http import HttpRequest, HttpResponse, HttpResponseBadRequest,HttpResponseNotAllowed
+from django.http import HttpRequest, HttpResponse, HttpResponseBadRequest,HttpResponseNotAllowed,HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.views import View
@@ -15,6 +16,7 @@ from django.views.generic.edit import FormView
 from django.utils.dateparse import parse_date
 from datetime import date, timedelta
 from django.db.models import Q
+from datetime import date, datetime
 
 
 
@@ -43,6 +45,8 @@ class SignupView(FormView):
 
 class LoginView(TemplateView):
     template_name="login.html"
+    redirect_authenticated_user = True
+    redirect_field_name = "next"
 
     def post(self,request):
         email=request.POST.get("email")
@@ -56,12 +60,19 @@ class LoginView(TemplateView):
         if user is not None:
             login(request,user)
             request.session["user_id"] = user.id
-            return redirect("home")
+            next_url = request.GET.get(self.redirect_field_name)
+            if next_url:
+                return HttpResponseRedirect(next_url)
+            else:
+                return HttpResponseRedirect("home")
                 
         else:
             error_message = "Incorrect identifiers"
         return render(request, "login.html", {"error": error_message})
     
+def logout_user(request):
+    logout(request)
+    return redirect('home')
 
 class AddRoomView(View):
     template_name = "addroom.html"
@@ -80,18 +91,18 @@ class AddRoomView(View):
             room.save()
             return redirect("listroom")
         else:
-            return HttpResponse("Le nom de la salle est requis.")
+            return HttpResponse("Room name is required.")
 
     def get(self, request):
         return render(request, self.template_name, {})
 
 
-class BookingView(View):
+@method_decorator(login_required, name='dispatch')
+class BookingView(TemplateView):
    
     template_name = "booking.html"
-
+    redirect_field_name = 'next'
     def get(self, request,room_id):
-        #user=self.request.user
         room = Room.objects.get(id= room_id)
         return render(request, self.template_name,{'room':room})
     
@@ -106,12 +117,23 @@ class BookingView(View):
                 id_room = room.id
             except Room.DoesNotExist:
                 error_message = "Room name not found."
-                return render(request, "booking.html", {"error": error_message})
-
+                return render(request, "booking.html", {"error": error_message,"room": room})
+            
+            start_date = datetime.strptime(start_date, '%Y-%m-%d').date()
+            end_date = datetime.strptime(end_date, '%Y-%m-%d').date()
+            
+            if start_date < date.today():
+                error_message = "Start date must be greater than or equal to today's date."
+                return render(request,"booking.html",{"error":error_message,"room": room})
+            
+            if end_date < start_date :
+                error_message = "End date must be greater than or equal to start date."
+                return render(request,"booking.html",{"error":error_message,"room": room})
+            
             room = get_object_or_404(Room, id=id_room)
             if not room.is_available(start_date, end_date):
                 error_message = "Room is not available for the selected dates."
-                return render(request, "booking.html", {"error": error_message})
+                return render(request, "booking.html", {"error": error_message,"room": room})
 
             room.availability = False
             room.save()
@@ -124,7 +146,7 @@ class BookingView(View):
                 end_date=end_date,
             )
             booking.save()
-            messages.success(request, "Reservation réussie")
+            messages.success(request, "Reservation successful")
             return redirect("home")
 
 

@@ -18,6 +18,7 @@ urlpatterns = [
     path('api/',include(router.urls)),
     path('signup/', SignupView.as_view(), name='signup'),
     path('login/', LoginView.as_view(), name='login'),
+    path('logout/',views.logout_user,name="logout"),
     path('addroom/', AddRoomView.as_view(), name='addroom'),
     path('booking/<int:room_id>', BookingView.as_view(), name='booking'),
     path('listroom/',ListRoomView.as_view(),name='listroom'),

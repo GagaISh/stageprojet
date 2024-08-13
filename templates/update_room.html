@@ -5,25 +5,25 @@
         <div class="col-md-8">
             <div class="card">
                 <div class="card-header">
-                    <h1 class="card-title">Mettre à jour une salle</h1>
+                    <h1 class="card-title">Update a Room</h1>
                 </div>
                 <div class="card-body">
                     <form method="post" action="{% url 'update_room' room.id %}" enctype="multipart/form-data">
                         {% csrf_token %}
                         <div class="form-group">
-                            <label for="room_name">Nom de la salle:</label>
+                            <label for="room_name">Room Name:</label>
                             <input type="text" class="form-control" id="room_name" name="room_name" value="{{ room.room_name }}" required>
                         </div>
                         <div class="form-group">
-                            <label for="place">Lieu:</label>
+                            <label for="place">Place:</label>
                             <input type="text" class="form-control" id="place" name="place" value="{{ room.place }}" required>
                         </div>
                         <div class="form-group">
-                            <label for="capacity">Capacité:</label>
+                            <label for="capacity">Capacity:</label>
                             <input type="number" class="form-control" id="capacity" name="capacity" value="{{ room.capacity }}" required>
                         </div>
                         <div class="form-group">
-                            <label for="price">Prix:</label>
+                            <label for="price">Price</label>
                             <input type="number" class="form-control" id="price" name="price" value="{{ room.price }}" required>
                         </div>
                         <div class="form-group">
@@ -35,7 +35,7 @@
                             <p>No image</p>
                             {% endif %}
                         </div>
-                        <button type="submit" class="btn btn-primary">Mettre à jour</button>
+                        <button type="submit" class="btn btn-primary">UPDATE</button>
                     </form>
                 </div>
             </div>

@@ -5,30 +5,30 @@
         <div class="col-md-8">
             <div class="card">
                 <div class="card-body">
-                    <h1 class="card-title mb-4 text-center" style="background-color: #66CDAA;">Inscription</h1>
+                    <h1 class="card-title mb-4 text-center" style="background-color: #66CDAA;">Registration</h1>
                     {% if error %}
                     <div class="alert alert-danger">{{ error }}</div>
                     {% endif %}
                     <form method="post" action="{% url 'signup' %}" class="row g-3">
                         {% csrf_token %}
                         <div class="col-md-6">
-                            <label for="last_name" class="form-label">Nom:</label>
+                            <label for="last_name" class="form-label">Last Name:</label>
                             <input type="text" class="form-control" id="first_name" name="last_name" required>
                         </div>
                         <div class="col-md-6">
-                            <label for="first_name" class="form-label">Prénom:</label>
+                            <label for="first_name" class="form-label">First Name:</label>
                             <input type="text" class="form-control" id="first_name" name="first_name" required>
                         </div>
                         <div class="col-md-6">
-                            <label for="birth_date" class="form-label">Date de naissance:</label>
+                            <label for="birth_date" class="form-label">Date of birth:</label>
                             <input type="date" class="form-control" id="birth_date" name="birth_date" required>
                         </div>
                         <div class="col-md-6">
-                            <label for="telephone" class="form-label">Téléphone:</label>
+                            <label for="telephone" class="form-label">Phone Number:</label>
                             <input type="tel" class="form-control" id="telephone" name="telephone" required>
                         </div>
                         <div class="col-md-6">
-                            <label for="address" class="form-label">Adresse:</label>
+                            <label for="address" class="form-label">Address:</label>
                             <input type="text" class="form-control" id="address" name="address" required>
                         </div>
                         <div class="col-md-6">
@@ -36,15 +36,15 @@
                             <input type="email" class="form-control" id="email" name="email" required>
                         </div>
                         <div class="col-md-6">
-                            <label for="password1" class="form-label">Mot de passe:</label>
+                            <label for="password1" class="form-label">Password:</label>
                             <input type="password" class="form-control" id="password1" name="password1" required>
                         </div>
                         <div class="col-md-6">
-                            <label for="password2" class="form-label">Confirmer le mot de passe:</label>
+                            <label for="password2" class="form-label">Confirm password:</label>
                             <input type="password" class="form-control" id="password2" name="password2" required>
                         </div>
                         <div class="col-12 text-center">
-                            <button type="submit" class="btn btn-primary">S'inscrire</button>
+                            <button type="submit" class="btn btn-primary">Register</button>
                         </div>
                     </form>
                 </div>
