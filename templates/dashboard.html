@@ -1,16 +1,37 @@
 <!DOCTYPE html>
 <html lang="en">
-{% load static %}
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Document</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <link rel="stylesheet" href="{% static 'main.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" />
+    <style>
+        .board {
+            background-color: #f8f9fa;
+            padding: 20px;
+        }
+        header {
+            background-color: #483D8B;
+            color: white;
+            padding: 10px 0;
+            text-align: center;
+        }
+        .sidebar {
+            padding: 15px;
+            height: 100vh;
+        }
+        .sidebar .nav-link {
+            color:#4169E1;
+            font-size: 18px;
+        }
+        .main {
+            padding: 20px;
+        }
+    </style>
 </head>
 <body class="board">
     <div>
-        {% block content %}
         <div class="container-fluid board">
             <header>
                 <div>
@@ -30,7 +51,6 @@
                 </div>
             </div>
         </div>
-        {% endblock %}
     </div>
 </body>
 </html>

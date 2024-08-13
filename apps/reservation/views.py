@@ -1,12 +1,12 @@
 import os
 
 
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login,logout
 from django.contrib import messages
-
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.core.files.storage import default_storage
-from django.http import HttpResponse, HttpResponseBadRequest
+from django.http import HttpRequest, HttpResponse, HttpResponseBadRequest,HttpResponseNotAllowed
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.views import View
@@ -25,61 +25,41 @@ from .serializers import RoomSerializer
 
 class SignupView(FormView):
     template_name = "signup.html"
-    form_class = SignUpForm
-    success_url = "/"
-
-    def get_success_url(self):
-        return reverse("home")
-
-    def form_valid(self, form):
-        form.save()
-        return super().form_valid(form)
-
-    def form_invalid(self, form):
-        return self.render_to_response(self.get_context_data(form=form))
-
-    def get(self, request, *args, **kwargs):
-        form = self.form_class()
-        return render(request, self.template_name, {"form": form})
-
-    def post(self, request, *args, **kwargs):
-        form = self.form_class(request.POST)
-        if form.is_valid():
-            return self.form_valid(form)
-        else:
-            return self.form_invalid(form)
-
-
-class LoginView(View):
-    template_name = "login.html"
+    form_class=SignUpForm
 
     def get(self, request):
-        if request.user.is_authenticated:
-            return redirect("booking")
-
-        context = {"page": "login"}
-        return render(request, self.template_name, context)
-
+        form=self.form_class() 
+        return render(request,self.template_name,{"form":form})
+    
     def post(self, request):
-        email = request.POST.get("email")
+        form = self.form_class(request.POST)
+        if form.is_valid():
+            form.save()
+            return redirect("home")
+            
+        else:
+            return self.render_to_response(self.get_context_data(form=form))
+
+
+class LoginView(TemplateView):
+    template_name="login.html"
+
+    def post(self,request):
+        email=request.POST.get("email")
         password = request.POST.get("password")
+        error_message = None
         if email is not None:
             email = email.lower()
 
-        try:
-            user = CustomUser.objects.get(email=email)
-            if user.check_password(password):
-                login(request, user)
-                request.session["user_id"] = user.id
-                if user.email == "ishimwegraciella@gmail.com":
-                    return redirect("admin")
-                else:
-                    return redirect("booking")
-            else:
-                error_message = "Incorrect identifiers"
-        except CustomUser.DoesNotExist:
+        user = authenticate(request, username=email, password=password)
+       
+        if user is not None:
+            login(request,user)
+            request.session["user_id"] = user.id
+            return redirect("home")
+                
+        else:
             error_message = "Incorrect identifiers"
-
         return render(request, "login.html", {"error": error_message})
     
 
@@ -107,26 +87,16 @@ class AddRoomView(View):
 
 
 class BookingView(View):
+   
     template_name = "booking.html"
 
-    def get(self, request):
-        user = request.user
-        initial_data = {}
-
-        if user.is_authenticated:
-            initial_data = {
-                'last_name': user.last_name,
-                'first_name': user.first_name,
-                'email': user.email,
-                'room_name': '',
-            }
-
-        return render(request, self.template_name, {'initial_data': initial_data})
-
-    def post(self, request):
-        user = request.user
-        if user.is_authenticated:
-            id_room = request.POST.get("room_id")
+    def get(self, request,room_id):
+        #user=self.request.user
+        room = Room.objects.get(id= room_id)
+        return render(request, self.template_name,{'room':room})
+    
+    def post(self, request,room_id):
+            user=self.request.user
             room_name = request.POST.get("room_name")
             start_date = request.POST.get("start_date")
             end_date = request.POST.get("end_date")
@@ -156,8 +126,7 @@ class BookingView(View):
             booking.save()
             messages.success(request, "Reservation réussie")
             return redirect("home")
-        else:
-            return redirect("login")
+
 
 
 class HomeView(View):
@@ -203,44 +172,7 @@ class ListRoomView(TemplateView):
                 )
                 return render(request, "listroom.html", {"datas": queryset})
         return super().dispatch(request, *args, **kwargs)
-    
-def delete_room(request, room_id):
-    room = Room.objects.get(id=room_id)
-    room.delete()
-    return redirect(reverse('listroom'))
 
-def delete_booking(request, booking_id):
-    booking = Booking.objects.get(id=booking_id)
-    room = booking.id_room
-    room.availability = True
-    room.save()
-    booking.delete()
-    return redirect(reverse('list-reserves'))
-
-class UpdateRoomView(TemplateView):
-    template_name = "update_room.html"
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        room_id = kwargs.get('room_id')
-        room = get_object_or_404(Room, id=room_id)
-        context['room'] = room
-        return context
-
-    def post(self, request, *args, **kwargs):
-        room_id = kwargs.get('room_id')
-        room = get_object_or_404(Room, id=room_id)
-        room.room_name = request.POST.get('room_name')
-        room.place = request.POST.get('place')
-        room.capacity = request.POST.get('capacity')
-        room.price = request.POST.get('price')
-        if 'image' in request.FILES:
-            room.image = request.FILES['image']
-        room.save()
-        return redirect('listroom')
-
-
-        
 
 
 class ListUsersView(TemplateView):
@@ -284,3 +216,61 @@ class ListReservesView(TemplateView):
                     ).select_related('id_room', 'id_user')
                     return render(request, "listreserve.html", {"datas": queryset})
             return super().dispatch(request, *args, **kwargs) 
+
+
+class RoomView(TemplateView):
+    template_name = "listroom.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["datas"] = Room.objects.all().order_by('id')
+        return context
+
+    def dispatch(self, request, *args, **kwargs):
+        if "btn-delete" in request.GET:
+            room_id = request.GET.get("btn-delete")
+            return redirect(reverse('delete_room', args=[room_id]))
+        elif "btn_update" in request.GET:
+            room_id = request.GET.get("btn_update")
+            return redirect(reverse('update_room', args=[room_id]))
+        return super().dispatch(request, *args, **kwargs)
+
+def delete_room(self, room_id):
+        room = Room.objects.get(id=room_id)
+        room.delete()
+
+
+class UpdateRoomView(TemplateView):
+    template_name = "update_room.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        room_id = kwargs.get('room_id')
+        room = get_object_or_404(Room, id=room_id)
+        context['room'] = room
+        return context
+
+    def post(self, request, *args, **kwargs):
+        room_id = kwargs.get('room_id')
+        room = get_object_or_404(Room, id=room_id)
+        room.room_name = request.POST.get('room_name')
+        room.place = request.POST.get('place')
+        room.capacity = request.POST.get('capacity')
+        room.price = request.POST.get('price')
+        if 'image' in request.FILES:
+            room.image = request.FILES['image']
+        room.save()
+        return redirect('listroom')
+
+def delete_booking(request, booking_id):
+    booking = Booking.objects.get(id=booking_id)
+    room = booking.id_room
+    room.availability = True
+    room.save()
+    booking.delete()
+    return redirect(reverse('list-reserves'))
+
+def delete_user(request,user_id):
+    user=CustomUser.objects.get(id=user_id)
+    user.delete()
+    return redirect(reverse('list-users'))

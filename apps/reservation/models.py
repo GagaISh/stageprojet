@@ -43,7 +43,7 @@ class CustomUser(AbstractBaseUser):
         "birth_date",
         "telephone",
         "address",
-        "email",
+
     ]
 
     objects = CustomUserManager()
@@ -73,8 +73,8 @@ class Room(models.Model):
 
 
 class Booking(models.Model):
-    id_user = models.ForeignKey("reservation.CustomUser", on_delete=models.CASCADE, related_name="bookings")
-    id_room = models.ForeignKey("reservation.Room", on_delete=models.CASCADE, related_name="bookings")
+    id_user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name="bookings")
+    id_room = models.ForeignKey(Room, on_delete=models.CASCADE, related_name="bookings")
     room_name = models.CharField(max_length=100)
     start_date = models.DateField()
     end_date = models.DateField()

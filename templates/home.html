@@ -68,7 +68,7 @@
                     <p class="card-text">{{ room.place }}</p>
                     <p class="card-text">Capacité: {{ room.capacity }}</p>
                     <p class="card-text">Prix: {{ room.price|intcomma }}</p>
-                    <a href="{% url 'login' %}" class="btn btn-primary">Réserver</a>
+                    <a href="{% url 'booking' room.id %}" class="btn btn-primary">Réserver</a>
                 </div>
             </div>
         </div>

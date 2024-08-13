@@ -26,7 +26,7 @@
     <div class="col-md-12">
       <form action="" method="GET" class="form-inline search_room-form">
         <input type="search" placeholder="search" name="search" class="form-control mr-2" />
-        <button type="submit" name="btn_SearchRoom" class="btn btn-primary">Search</button>
+        <button type="submit" name="btn_SearchRoom" class="btn btn-primary">Rechercher</button>
       </form>
     </div>
   </div>
@@ -38,6 +38,10 @@
   </div>
 
 </div>
+
+<form method="post">
+
+
 
 <table class="table table-striped">
   <thead>
@@ -67,18 +71,19 @@
       </td>
       <td>
         {% if data.availability %}
-            {% fa5_icon 'check' style='solid' color='green' %}
+          <i class="fas fa-check" style="color: green;"></i>
         {% else %}
-            {% fa5_icon 'times' style='solid' color='red' %}
+          <i class="fas fa-times" style="color: red;"></i>
         {% endif %}
       </td>
       <td>
-        <a href="{% url 'update_room' data.id %}"><button type="button" class="btn btn-primary btn-update">Modifier</button></a>
-        <a href="{% url 'delete_room' data.id %}"><button type="button" name="btn-delete" class="btn btn-danger">Supprimer</button></a>
+        <a href="{% url 'update_room' data.id %}"><button type="button" name="btn_update" class="btn btn-primary btn-update">Modifier</button></a>
+        <button type="button" name="btn-delete" value="{{ data.id}}" class="btn btn-danger">Supprimer</button>
       </td>
     </tr>
     {% endfor %}
   </tbody>
 </table>
+</form>
 
 {% endblock %}
