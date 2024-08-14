@@ -45,7 +45,6 @@
                 <td>{{ booking.start_date }}</td>
                 <td>{{ booking.end_date }}</td>
                 <td>
-                    <a href=""><button type="button" class="btn btn-primary btn-update">UPDATE</button></a>
                     <a href="{% url 'delete_booking' booking.id %}"><button type="button" name="btn-delete" class="btn btn-danger">DELETE</button></a>
                 </td>
             </tr>

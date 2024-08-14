@@ -78,7 +78,7 @@
       </td>
       <td>
         <a href="{% url 'update_room' data.id %}"><button type="button" name="btn_update" class="btn btn-primary btn-update">UPDATE</button></a>
-        <button type="button" name="btn-delete" value="{{ data.id}}" class="btn btn-danger">DELETE</button>
+        <a href="{% url 'delete_room' data.id %}"><button type="button" name="btn-delete" value="{{ data.id}}" class="btn btn-danger">DELETE</button></a>
       </td>
     </tr>
     {% endfor %}

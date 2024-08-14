@@ -16,13 +16,22 @@
             color: white;
             padding: 10px 0;
             text-align: center;
+            position: relative;
+        }
+        .logout-link {
+            position: absolute;
+            right: 20px;
+            top: 10px;
+            font-size: 1.3rem;
+            font-weight: 900;
+            color: #ffffff;
         }
         .sidebar {
             padding: 15px;
             height: 100vh;
         }
         .sidebar .nav-link {
-            color:#4169E1;
+            color: #4169E1;
             font-size: 18px;
         }
         .main {
@@ -31,24 +40,21 @@
     </style>
 </head>
 <body class="board">
-    <div>
-        <div class="container-fluid board">
-            <header>
-                <div>
-                    <h1>Administration</h1>
-                </div>
-            </header>
-            <div class="row">
-                <div class="col-md-3 sidebar">
-                    <ul class="nav flex-column sider">
-                        <li class="nav-item"><a class="nav-link" href="{% url 'list-users' %}">List Users</a></li>
-                        <li class="nav-item"><a class="nav-link" href="{% url 'listroom' %}">List Rooms </a></li>
-                        <li class="nav-item"><a class="nav-link" href="{% url 'list-reserves' %}">Reservations</a></li>
-                    </ul>
-                </div>
-                <div class="col-md-9 main">
-                    {% block main_content %}{% endblock %}
-                </div>
+    <div class="container-fluid board">
+        <header>
+            <a class="logout-link" href="{% url 'logout' %}">Logout</a>
+            <h1>Administration</h1>
+        </header>
+        <div class="row">
+            <div class="col-md-3 sidebar">
+                <ul class="nav flex-column sider">
+                    <li class="nav-item"><a class="nav-link" href="{% url 'list-users' %}">List Users</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'listroom' %}">List Rooms</a></li>
+                    <li class="nav-item"><a class="nav-link" href="{% url 'list-reserves' %}">Reservations</a></li>
+                </ul>
+            </div>
+            <div class="col-md-9 main">
+                {% block main_content %}{% endblock %}
             </div>
         </div>
     </div>

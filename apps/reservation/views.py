@@ -2,12 +2,10 @@ import os
 
 
 from django.contrib.auth import authenticate, login,logout
-from django.contrib import messages
-from django.contrib.auth.mixins import LoginRequiredMixin
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.core.files.storage import default_storage
-from django.http import HttpRequest, HttpResponse, HttpResponseBadRequest,HttpResponseNotAllowed,HttpResponseRedirect
+from django.http import  HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse
 from django.views import View
@@ -18,12 +16,9 @@ from datetime import date, timedelta
 from django.db.models import Q
 from datetime import date, datetime
 
-
-
 from apps.reservation.models import Booking, CustomUser, Room
 
 from .forms import SignUpForm
-from .serializers import RoomSerializer
 
 class SignupView(FormView):
     template_name = "signup.html"
@@ -58,16 +53,21 @@ class LoginView(TemplateView):
         user = authenticate(request, username=email, password=password)
        
         if user is not None:
-            login(request,user)
+            login(request, user)
             request.session["user_id"] = user.id
             next_url = request.GET.get(self.redirect_field_name)
-            if next_url:
+            
+            if next_url == "/admi/":
+                if email == "ishimwegraciella@gmail.com":
+                    return HttpResponseRedirect(reverse('admin'))
+                else:
+                    return redirect('home')
+            elif next_url:
                 return HttpResponseRedirect(next_url)
             else:
-                return HttpResponseRedirect("home")
-                
+                return HttpResponseRedirect(reverse('home'))
         else:
-            error_message = "Incorrect identifiers"
+            error_message = "Identifiants incorrects"
         return render(request, "login.html", {"error": error_message})
     
 def logout_user(request):
@@ -146,7 +146,6 @@ class BookingView(TemplateView):
                 end_date=end_date,
             )
             booking.save()
-            messages.success(request, "Reservation successful")
             return redirect("home")
 
 
@@ -160,14 +159,16 @@ class HomeView(View):
         }
         return render(request,self.template_name, context)
 
+@login_required
 def dashboard(request):
     return render(request, "dashboard.html")
 
 
 
-
+@method_decorator(login_required, name='dispatch')
 class ListRoomView(TemplateView):
     template_name = "listroom.html"
+    redirect_field_name = 'next'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -196,18 +197,20 @@ class ListRoomView(TemplateView):
         return super().dispatch(request, *args, **kwargs)
 
 
-
+@method_decorator(login_required, name='dispatch')
 class ListUsersView(TemplateView):
     template_name = "listusers.html"
+    redirect_field_name = 'next'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
         context["datas"] = CustomUser.objects.order_by('id')
         return context
     
-
+@method_decorator(login_required, name='dispatch')
 class ListReservesView(TemplateView):
     template_name = "listreserve.html"
+    redirect_field_name = 'next'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -256,14 +259,16 @@ class RoomView(TemplateView):
             room_id = request.GET.get("btn_update")
             return redirect(reverse('update_room', args=[room_id]))
         return super().dispatch(request, *args, **kwargs)
-
+@login_required
 def delete_room(self, room_id):
         room = Room.objects.get(id=room_id)
         room.delete()
+        return redirect(reverse('listroom'))
 
-
+@method_decorator(login_required, name='dispatch')
 class UpdateRoomView(TemplateView):
     template_name = "update_room.html"
+    redirect_field_name = 'next'
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
@@ -272,8 +277,7 @@ class UpdateRoomView(TemplateView):
         context['room'] = room
         return context
 
-    def post(self, request, *args, **kwargs):
-        room_id = kwargs.get('room_id')
+    def post(self, request,room_id):
         room = get_object_or_404(Room, id=room_id)
         room.room_name = request.POST.get('room_name')
         room.place = request.POST.get('place')
@@ -284,6 +288,7 @@ class UpdateRoomView(TemplateView):
         room.save()
         return redirect('listroom')
 
+@login_required
 def delete_booking(request, booking_id):
     booking = Booking.objects.get(id=booking_id)
     room = booking.id_room
@@ -292,6 +297,9 @@ def delete_booking(request, booking_id):
     booking.delete()
     return redirect(reverse('list-reserves'))
 
+
+
+@login_required
 def delete_user(request,user_id):
     user=CustomUser.objects.get(id=user_id)
     user.delete()
