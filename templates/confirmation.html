@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="container my-5 d-flex align-items-center" style="min-height: 83.6vh;">
+    <div class="row justify-content-center w-100">
+        <div class="col-lg-6 col-md-8 col-sm-10 text-center">
+            {% if last_name %}
+                <h2>Thank you {{ last_name }}  {{ first_name }}, we have received your message.</h2>
+                <p>We will reply to you very soon at the following email address : {{ email }}</p>
+            {% else %}
+                <h1>Send us a message</h1>
+                <a href="{% url 'contact' %}" class="btn btn-success">here</a>
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock %}

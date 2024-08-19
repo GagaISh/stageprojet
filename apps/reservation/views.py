@@ -1,13 +1,14 @@
 import os
+import re
 
 
 from django.contrib.auth import authenticate, login,logout
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 from django.core.files.storage import default_storage
-from django.http import  HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
-from django.urls import reverse
+from django.urls import reverse,reverse_lazy
 from django.views import View
 from django.views.generic import TemplateView
 from django.views.generic.edit import FormView
@@ -15,6 +16,8 @@ from django.utils.dateparse import parse_date
 from datetime import date, timedelta
 from django.db.models import Q
 from datetime import date, datetime
+from django.core.mail import send_mail
+
 
 from apps.reservation.models import Booking, CustomUser, Room
 
@@ -23,19 +26,14 @@ from .forms import SignUpForm
 class SignupView(FormView):
     template_name = "signup.html"
     form_class=SignUpForm
+    success_url = reverse_lazy("home")
 
-    def get(self, request):
-        form=self.form_class() 
-        return render(request,self.template_name,{"form":form})
-    
-    def post(self, request):
-        form = self.form_class(request.POST)
-        if form.is_valid():
-            form.save()
-            return redirect("home")
-            
-        else:
-            return self.render_to_response(self.get_context_data(form=form))
+    def form_valid(self, form):
+        form.save()
+        return super().form_valid(form)
+
+    def form_invalid(self, form):
+        return super().form_invalid(form)
 
 
 class LoginView(TemplateView):
@@ -56,16 +54,24 @@ class LoginView(TemplateView):
             login(request, user)
             request.session["user_id"] = user.id
             next_url = request.GET.get(self.redirect_field_name)
-            
-            if next_url == "/admi/":
-                if email == "ishimwegraciella@gmail.com":
-                    return HttpResponseRedirect(reverse('admin'))
-                else:
-                    return redirect('home')
-            elif next_url:
-                return HttpResponseRedirect(next_url)
-            else:
+            protected_paths = ["/admi/", "/addroom/","/listroom/", "/list-users/", 
+                               "/list-reserves/", "/delete_room/","update_room", 
+                               "/delete_booking/", "/delete_user/"
+            ]
+            if next_url:
+               if (next_url in protected_paths or 
+                            re.match(r'^/update_room/\d+/?$', next_url) or 
+                            re.match(r'^/delete_booking/\d+/?$', next_url) or 
+                            re.match(r'^/delete_user/\d+/?$', next_url)) :
+                            if email != "ishimwegraciella17@gmail.com":
+                                return HttpResponseRedirect(reverse('home'))
+                            else :
+                                return HttpResponseRedirect(next_url)
+               else :
+                    return HttpResponseRedirect(next_url)
+            else :
                 return HttpResponseRedirect(reverse('home'))
+                   
         else:
             error_message = "Identifiants incorrects"
         return render(request, "login.html", {"error": error_message})
@@ -74,8 +80,13 @@ def logout_user(request):
     logout(request)
     return redirect('home')
 
+@method_decorator(login_required, name='dispatch')
 class AddRoomView(View):
     template_name = "addroom.html"
+    redirect_field_name = 'next'
+
+    def get(self, request):
+        return render(request, self.template_name, {})
 
     def post(self, request):
         room_name = request.POST.get("room_name")
@@ -93,15 +104,13 @@ class AddRoomView(View):
         else:
             return HttpResponse("Room name is required.")
 
-    def get(self, request):
-        return render(request, self.template_name, {})
-
+    
 
 @method_decorator(login_required, name='dispatch')
 class BookingView(TemplateView):
-   
     template_name = "booking.html"
     redirect_field_name = 'next'
+
     def get(self, request,room_id):
         room = Room.objects.get(id= room_id)
         return render(request, self.template_name,{'room':room})
@@ -218,7 +227,7 @@ class ListReservesView(TemplateView):
         return context 
 
     def dispatch(self,request, *args, **kwargs):
-            if "btn btn_filter" in request.GET:
+            if "btn_filter" in request.GET:
                 start_date = self.request.GET.get('start_date')
                 end_date = self.request.GET.get('end_date')
                 start_date = parse_date(start_date) if start_date else date.today()
@@ -242,23 +251,6 @@ class ListReservesView(TemplateView):
                     return render(request, "listreserve.html", {"datas": queryset})
             return super().dispatch(request, *args, **kwargs) 
 
-
-class RoomView(TemplateView):
-    template_name = "listroom.html"
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context["datas"] = Room.objects.all().order_by('id')
-        return context
-
-    def dispatch(self, request, *args, **kwargs):
-        if "btn-delete" in request.GET:
-            room_id = request.GET.get("btn-delete")
-            return redirect(reverse('delete_room', args=[room_id]))
-        elif "btn_update" in request.GET:
-            room_id = request.GET.get("btn_update")
-            return redirect(reverse('update_room', args=[room_id]))
-        return super().dispatch(request, *args, **kwargs)
 @login_required
 def delete_room(self, room_id):
         room = Room.objects.get(id=room_id)
@@ -304,3 +296,48 @@ def delete_user(request,user_id):
     user=CustomUser.objects.get(id=user_id)
     user.delete()
     return redirect(reverse('list-users'))
+
+
+@method_decorator(login_required, name='dispatch')
+class ContactView(TemplateView):
+    template_name = "contact.html"
+    redirect_field_name = 'next'
+
+    def get(self,request):
+        user=request.user
+        return render(request,self.template_name,{'user':user})
+    
+    def post(self, request):
+        last_name = request.POST.get("last_name")
+        first_name = request.POST.get("first_name")
+        email = request.POST.get("email")
+        message=request.POST.get("message")
+
+        subject = f"Message de {last_name}"
+        body = f"""
+        Last Name: {last_name}
+        First Name: {first_name}
+        email: {email}
+        message: {message}
+        """
+        send_mail(subject,body,email,['ishimwegraciella17@gmail.com'])
+
+        return redirect(reverse('confirmation') + f'?last_name={last_name}&first_name={first_name}&email={email}')
+
+    
+@method_decorator(login_required, name='dispatch')
+class ConfirmationView(TemplateView):
+    template_name = "confirmation.html"
+    redirect_field_name = 'next'
+
+    def get(self, request, *args, **kwargs):
+        last_name = request.GET.get('last_name')
+        first_name = request.GET.get('first_name')
+        email = request.GET.get('email')
+        
+        context = {
+            'last_name': last_name, 
+            'first_name': first_name,
+            'email': email
+        }
+        return render(request, self.template_name, context)

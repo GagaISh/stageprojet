@@ -35,6 +35,8 @@ urlpatterns = [
     path('update_room/<int:room_id>/', views.UpdateRoomView.as_view(), name='update_room'),
     path('delete_booking/<int:booking_id>/', views.delete_booking, name='delete_booking'),
     path('delete_user/<int:user_id>/', views.delete_user, name='delete_user'),
+    path('contact/',ContactView.as_view(),name='contact'),
+    path('confirmation/',ConfirmationView.as_view(),name = 'confirmation'),
     path('password-reset/', PasswordResetView.as_view(template_name='password_reset.html'),name='password-reset'),
     path('password-reset/done/', PasswordResetDoneView.as_view(template_name='password_reset_done.html'),name='password_reset_done'),
     path('password-reset-confirm/<uidb64>/<token>/', PasswordResetConfirmView.as_view(template_name='password_reset_confirm.html'),name='password_reset_confirm'),
