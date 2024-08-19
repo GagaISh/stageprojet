@@ -1,6 +1,11 @@
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager,PermissionsMixin
+from django.contrib.auth.models import (
+    AbstractBaseUser,
+    BaseUserManager,
+    PermissionsMixin,
+    User,
+)
 from django.db import models
-from django.contrib.auth.models import User
+
 
 class CustomUserManager(BaseUserManager):
     def create_user(self, email, password, **extra_fields):
@@ -43,19 +48,18 @@ class CustomUser(AbstractBaseUser):
         "birth_date",
         "telephone",
         "address",
-
     ]
 
     objects = CustomUserManager()
 
     def __str__(self):
         return f"{self.last_name} {self.first_name}"
-    
+
     def has_perm(self, perm, obj=None):
-        return True  
+        return True
 
     def has_module_perms(self, app_label):
-        return True  
+        return True
 
 
 class Room(models.Model):
@@ -68,18 +72,19 @@ class Room(models.Model):
 
     def is_available(self, start_date, end_date):
         bookings = Booking.objects.filter(
-            id_room=self,
-            start_date__lte=end_date,
-            end_date__gte=start_date
+            id_room=self, start_date__lte=end_date, end_date__gte=start_date
         )
         return not bookings.exists()
+
     def delete(self, *args, **kwargs):
         Booking.objects.filter(id_room=self).delete()
         super().delete(*args, **kwargs)
 
 
 class Booking(models.Model):
-    id_user = models.ForeignKey(CustomUser, on_delete=models.CASCADE, related_name="bookings")
+    id_user = models.ForeignKey(
+        CustomUser, on_delete=models.CASCADE, related_name="bookings"
+    )
     id_room = models.ForeignKey(Room, on_delete=models.CASCADE, related_name="bookings")
     room_name = models.CharField(max_length=100)
     start_date = models.DateField()

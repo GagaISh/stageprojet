@@ -14,8 +14,6 @@ import os
 import sys
 from pathlib import Path
 
-
-
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(os.path.join(BASE_DIR, "apps"))
 
@@ -49,10 +47,10 @@ INSTALLED_APPS = [
     "django_filters",
     "fontawesome_5",
 ]
-REST_FRAMEWORK={
-    'DEFAULT_FILTER_BACKENDS':[
-        'django_filters.rest_framework.DjangoFilterBackend',
-        'rest_framework.filters.SearchFilter',
+REST_FRAMEWORK = {
+    "DEFAULT_FILTER_BACKENDS": [
+        "django_filters.rest_framework.DjangoFilterBackend",
+        "rest_framework.filters.SearchFilter",
     ]
 }
 
@@ -64,13 +62,12 @@ MIDDLEWARE = [
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
-    "apps.reservation.middleware.AdminEmailMiddleware"
+    "apps.reservation.middleware.AdminEmailMiddleware",
 ]
 
 ROOT_URLCONF = "StageProjet.urls"
-MEDIA_ROOT = os.path.join(BASE_DIR,"media")
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 MEDIA_URL = "/media/"
-
 
 
 TEMPLATES_DIR = os.path.join(BASE_DIR, "templates")
@@ -148,7 +145,7 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.0/howto/static-files/
 
-#MEDIA_ROOT = os.path.join(BASE_DIR, 'StageProjet/settings/static/images')
+# MEDIA_ROOT = os.path.join(BASE_DIR, 'StageProjet/settings/static/images')
 STATICFILES_DIRS = (os.path.join(os.path.dirname(__file__), "static"),)
 STATICFILES_FINDERS = (
     "django.contrib.staticfiles.finders.FileSystemFinder",
@@ -161,12 +158,12 @@ STATIC_ROOT = os.path.join(BASE_DIR, "static")
 # https://docs.djangoproject.com/en/5.0/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
-AUTH_USER_MODEL="reservation.CustomUser"
-LOGIN_URL="/login/"
+AUTH_USER_MODEL = "reservation.CustomUser"
+LOGIN_URL = "/login/"
 
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.gmail.com'
+EMAIL_BACKEND = "django.core.mail.backends.smtp.EmailBackend"
+EMAIL_HOST = "smtp.gmail.com"
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
-EMAIL_HOST_USER = 'ishimwegraciella17@gmail.com'
-EMAIL_HOST_PASSWORD = 'aweu vlcf pose fcmw'
+EMAIL_HOST_USER = "ishimwegraciella17@gmail.com"
+EMAIL_HOST_PASSWORD = "aweu vlcf pose fcmw"
