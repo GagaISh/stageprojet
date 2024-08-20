@@ -33,6 +33,8 @@ urlpatterns = [
     path("list-users/", ListUsersView.as_view(), name="list-users"),
     path("list-reserves/", ListReservesView.as_view(), name="list-reserves"),
     path("delete_room/<int:room_id>/", views.delete_room, name="delete_room"),
+    path('cancel_booking/<int:booking_id>/', CancelBookingView.as_view(), name='cancel_booking'),
+    path("reservationclient/",ReservationClientView.as_view(), name="reservationclient"),
     path(
         "update_room/<int:room_id>/", views.UpdateRoomView.as_view(), name="update_room"
     ),

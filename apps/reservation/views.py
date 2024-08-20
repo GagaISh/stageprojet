@@ -1,5 +1,6 @@
 import os
 import re
+import logging
 from datetime import date, datetime, timedelta
 
 from django.contrib.auth import authenticate, login, logout
@@ -7,7 +8,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.files.storage import default_storage
 from django.core.mail import send_mail
 from django.db.models import Q
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect,HttpResponseNotFound
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse, reverse_lazy
 from django.utils.dateparse import parse_date
@@ -15,11 +16,13 @@ from django.utils.decorators import method_decorator
 from django.views import View
 from django.views.generic import TemplateView
 from django.views.generic.edit import FormView
+from django.utils import timezone
 
 from apps.reservation.models import Booking, CustomUser, Room
 
 from .forms import SignUpForm
 
+logger = logging.getLogger(__name__)
 
 class SignupView(FormView):
     template_name = "signup.html"
@@ -158,7 +161,7 @@ class BookingView(TemplateView):
             )
 
         room = get_object_or_404(Room, id=id_room)
-        if not room.is_available(start_date, end_date):
+        if room.is_available(start_date, end_date):
             error_message = "Room is not available for the selected dates."
             return render(
                 request, "booking.html", {"error": error_message, "room": room}
@@ -243,7 +246,7 @@ class ListReservesView(TemplateView):
         context = super().get_context_data(**kwargs)
         context["datas"] = Booking.objects.filter(
             id_room__availability=False
-        ).select_related("id_room", "id_user")
+        )
         return context
 
     def dispatch(self, request, *args, **kwargs):
@@ -271,7 +274,10 @@ class ListReservesView(TemplateView):
                     | Q(id_room__room_name__icontains=search_query)
                 ).select_related("id_room", "id_user")
                 return render(request, "listreserve.html", {"datas": queryset})
+            
         return super().dispatch(request, *args, **kwargs)
+    
+     
 
 
 @login_required
@@ -315,6 +321,29 @@ def delete_booking(request, booking_id):
     return redirect(reverse("list-reserves"))
 
 
+class CancelBookingView(View):
+      def post(self, request, booking_id):
+        try:
+            booking = Booking.objects.get(id=booking_id)
+            room = booking.id_room
+        except Booking.DoesNotExist:
+            return HttpResponseNotFound("Reservation not found.")
+        booking.is_cancelled = True
+        booking.save()
+
+        has_other_reservations = Booking.objects.filter(id_room=room, start_date__gt=datetime.now())
+    
+        if  has_other_reservations.exists():
+            room.availability = False
+            logger.info(f"Booking cancelled. Room availability: {room.availability}")
+        else:
+            room.availability = True
+            logger.info(f"Booking cancelled. Room availability: {room.availability}")
+        room.save()
+        return redirect('reservationclient')
+
+
+    
 @login_required
 def delete_user(request, user_id):
     user = CustomUser.objects.get(id=user_id)
@@ -364,3 +393,48 @@ class ConfirmationView(TemplateView):
 
         context = {"last_name": last_name, "first_name": first_name, "email": email}
         return render(request, self.template_name, context)
+
+
+
+class ReservationClientView(TemplateView):
+    template_name = "reservationclient.html"
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context["datas"] = Booking.objects.filter(
+            id_user= self.request.user
+        ).select_related("id_room", "id_user")
+        return context
+
+    def dispatch(self, request, *args, **kwargs):
+        user = self.request.user
+
+        if "btn_filter" in request.GET:
+            
+            start_date = self.request.GET.get("start_date")
+            end_date = self.request.GET.get("end_date")
+            start_date = parse_date(start_date) if start_date else date.today()
+            end_date = (
+                parse_date(end_date) if end_date else date.today() + timedelta(days=30)
+            )
+            queryset = Booking.objects.filter(
+                id_user=user,
+                id_room__availability=False,
+                start_date__gte=start_date,
+                end_date__lte=end_date,
+            ).select_related("id_room", "id_user")
+            return render(request, "reservationclient.html", {"datas": queryset})
+
+        if "btn_SearchBooking" in request.GET:
+            search_query = request.GET.get("search")
+            if search_query:
+                queryset = Booking.objects.filter(
+                    id_user=user
+                ).filter(
+                    Q(id_room__room_name__icontains=search_query) |
+                    Q(id_room__place__icontains=search_query)
+                ).select_related("id_room", "id_user")
+                return render(request, "reservationclient.html", {"datas": queryset})
+        if "btn-cancel" in request.GET:
+             return self.cancel_booking(request)
+        return super().dispatch(request, *args, **kwargs)

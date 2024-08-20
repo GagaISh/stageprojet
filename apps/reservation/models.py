@@ -72,9 +72,9 @@ class Room(models.Model):
 
     def is_available(self, start_date, end_date):
         bookings = Booking.objects.filter(
-            id_room=self, start_date__lte=end_date, end_date__gte=start_date
+            id_room=self, start_date__lte=end_date, end_date__gte=start_date,is_cancelled=False
         )
-        return not bookings.exists()
+        return bookings.exists()
 
     def delete(self, *args, **kwargs):
         Booking.objects.filter(id_room=self).delete()
@@ -89,3 +89,4 @@ class Booking(models.Model):
     room_name = models.CharField(max_length=100)
     start_date = models.DateField()
     end_date = models.DateField()
+    is_cancelled = models.BooleanField(default=False)

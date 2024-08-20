@@ -1,6 +1,20 @@
 {% extends 'dashboard.html' %}
 
 {% block main_content %}
+{% load humanize %}
+{% load fontawesome_5 %}
+
+{% block extra_head %}
+<style>
+    .disabled {
+    opacity: 0.5; 
+    pointer-events: none;
+} 
+</style>
+    
+
+{% endblock %}
+
 <div class="container-fluid container_listreserve">
     <h2 class="mb-4">Reservation</h2>
     <div class="row">
@@ -29,23 +43,36 @@
             <tr>
                 <th>Client</th>
                 <th>Room Name</th>
-                <th>Start Date</th>
-                <th>End date</th>
+                <th>Place</th>
+                <th>Capacity</th>
+                <th>Price</th>
+                <th>Meeting Start Date</th>
+                <th>Metting End date</th>
                 <th>Actions</th>
             </tr>
         </thead>
         <tbody>
             {% for booking in datas %}
-            <tr>
+            <tr class="{% if booking.is_cancelled %}disabled{% endif %}">
                 <td>{{ booking.id_user.last_name }} {{ booking.id_user.first_name }}
                     <br>
                     {{ booking.id_user.email }}
+                    {% if booking.is_cancelled %}
+                        <p style="color: red;">Cette réservation a été annulée</p>
+                    {% endif %}
                 </td>
                 <td>{{ booking.room_name }}</td>
+                <td>{{ booking.id_room.place }}</td>
+                <td>{{ booking.id_room.capacity }}</td>
+                <td>{{ booking.id_room.price|intcomma }}</td>
                 <td>{{ booking.start_date }}</td>
                 <td>{{ booking.end_date }}</td>
                 <td>
-                    <a href="{% url 'delete_booking' booking.id %}"><button type="button" name="btn-delete" class="btn btn-danger">DELETE</button></a>
+                    {% if not booking.is_cancelled %}
+                        <a href="{% url 'delete_booking' booking.id %}">
+                            <button type="button" name="btn-delete" class="btn btn-danger">DELETE</button>
+                        </a>
+                    {% endif %}
                 </td>
             </tr>
             {% endfor %}
