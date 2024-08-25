@@ -1,0 +1,58 @@
+.bg-darkcyan {
+    background-color:#4169E1;
+}
+
+.carousel-item {
+    height: 90vh;
+    min-height: 300px;
+    background: no-repeat center center scroll;
+    -webkit-background-size: cover;
+    -moz-background-size: cover;
+    -o-background-size: cover;
+    background-size: cover;
+}
+
+.welcome {
+    font-weight: 900;
+    font-size: 22px;
+}
+.welcome-message {
+    font-weight: 900;
+    font-size: 22px;
+    color: blue;
+}
+.board {
+    background-color: #f8f9fa;
+    padding: 20px;
+}
+header {
+    background-color: #483D8B;
+    color: white;
+    padding: 10px 0;
+    text-align: center;
+    position: relative;
+}
+.logout-link {
+    position: absolute;
+    right: 20px;
+    top: 10px;
+    font-size: 1.3rem;
+    font-weight: 900;
+    color: #ffffff;
+}
+.sidebar {
+    padding: 15px;
+    height: 100vh;
+}
+.sidebar .nav-link {
+    color: #4169E1;
+    font-size: 18px;
+}
+.main {
+    padding: 20px;
+}
+
+.disabled {
+    opacity: 0.5; 
+    pointer-events: none;
+} 

@@ -15,6 +15,7 @@ from apps.reservation.views import *
 
 from .api import BookingViewSet, CustomUserViewSet, RoomViewSet
 
+
 router = routers.DefaultRouter()
 router.register("user", CustomUserViewSet, basename="user")
 router.register("room", RoomViewSet, basename="room")

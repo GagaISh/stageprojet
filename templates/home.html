@@ -1,19 +1,10 @@
 {% extends 'base.html' %}
-{% block content %}
+
 {% load humanize %}
 
-<style>
-    .carousel-item {
-        height: 90vh;
-        min-height: 300px;
-        background: no-repeat center center scroll;
-        -webkit-background-size: cover;
-        -moz-background-size: cover;
-        -o-background-size: cover;
-        background-size: cover;
-    }
-</style>
+{% load i18n %} 
 
+{% block content %}
 <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
     <ol class="carousel-indicators">
         <li data-target="#carouselExampleIndicators" data-slide-to="0" class="active"></li>
@@ -23,20 +14,20 @@
     <div class="carousel-inner">
         <div class="carousel-item active" style="background-image: url('media/images/16.jpg')">
             <div class="carousel-caption d-none d-md-block">
-                <h5>Bienvenue sur notre système de réservation de salle de reunion!</h5>
-                <p>Oubliez les réservations de salles de réunion chaotiques, optez pour la simplicité et l'efficacité !</p>
+                <h5 class="welcome-message">{% trans "Bienvenue sur notre système de réservation de salle de réunion!" %}</h5>
+                <p class="welcome-message">{% trans "Oubliez les réservations de salles de réunion chaotiques, optez pour la simplicité et l'efficacité !" %}</p>
             </div>
         </div>
         <div class="carousel-item" style="background-image: url('media/images/6.jpg')">
             <div class="carousel-caption d-none d-md-block">
-                <h5>Découvrez notre système de réservation en ligne</h5>
-                <p>Transformez vos réunions en un succès.</p>
+                <h5 class="welcome">{% trans "Découvrez notre système de réservation en ligne" %}</h5>
+                <p class="welcome">{% trans "Transformez vos réunions en un succès." %}</p>
             </div>
         </div>
         <div class="carousel-item" style="background-image: url('media/images/13.jpg')">
             <div class="carousel-caption d-none d-md-block">
-                <h5>Réservez maintenant !</h5>
-                <p>Profitez de notre service simple et efficace.</p>
+                <h5 class="welcome">{% trans "Réservez maintenant !" %}</h5>
+                <p class="welcome">{% trans "Profitez de notre service simple et efficace." %}</p>
             </div>
         </div>
     </div>
@@ -60,15 +51,15 @@
                 {% else %}
                 <div class="card-body">
                     <h5 class="card-title">{{ room.room_name }}</h5>
-                    <p class="card-text">No image available</p>
+                    <p class="card-text">{% trans "No image available" %}</p>
                 </div>
                 {% endif %}
                 <div class="card-body">
-                    <h5 class="card-title">Room Name: {{ room.room_name }}</h5>
-                    <p class="card-text">Place: {{ room.place }}</p>
-                    <p class="card-text">Capacity: {{ room.capacity }}</p>
-                    <p class="card-text">Price: {{ room.price|intcomma }}</p>
-                    <a href="{% url 'booking' room.id %}" class="btn btn-primary">Booking</a>
+                    <h5 class="card-title">{% trans "Room Name:" %} {{ room.room_name }}</h5>
+                    <p class="card-text">{% trans "Place:" %} {{ room.place }}</p>
+                    <p class="card-text">{% trans "Capacity:" %} {{ room.capacity }}</p>
+                    <p class="card-text">{% trans "Price:" %} {{ room.price|intcomma }}</p>
+                    <a href="{% url 'booking' room.id %}" class="btn btn-primary">{% trans "Booking" %}</a>
                 </div>
             </div>
         </div>

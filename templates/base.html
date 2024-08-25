@@ -1,14 +1,14 @@
+{% load i18n %}
+
+{% load static %}
+
 <!DOCTYPE html>
-<html lang="en">
+<html lang="{% get_current_language as LANGUAGE_CODE %}">
 <head>
     <meta charset="UTF-8">
-    <title>Meeting Room Reservation System</title>
+    <title>{% trans "Meeting Room Reservation System" %}</title>
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
-    <style>
-        .bg-darkcyan {
-            background-color:#4169E1;
-        }
-    </style>
+    <link rel="stylesheet" href="{% static 'style.css' %}">
     {% block extra_head %}
     {% endblock %}
 </head>
@@ -21,28 +21,28 @@
                 <div class="collapse navbar-collapse justify-content-center" id="navbarNav">
                     <ul class="navbar-nav">
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'home' %}" style="font-size: 1.3rem; font-weight: 900;">Home</a>
+                            <a class="nav-link" href="{% url 'home' %}" style="font-size: 1.3rem; font-weight: 900;">{% trans "Home" %}</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'home' %}#services-section" style="font-size: 1.3rem; font-weight: 900;">Services</a>
+                            <a class="nav-link" href="{% url 'home' %}#services-section" style="font-size: 1.3rem; font-weight: 900;">{% trans "Services" %}</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'contact' %}" style="font-size: 1.3rem; font-weight: 900;">Contact</a>
+                            <a class="nav-link" href="{% url 'contact' %}" style="font-size: 1.3rem; font-weight: 900;">{% trans "Contact" %}</a>
                         </li>
                     </ul>
                 </div>
                 {% if user.is_authenticated %}
                     <ul class="navbar-nav">
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'logout' %}" style="font-size: 1.3rem; font-weight: 900;">Logout</a>
+                            <a class="nav-link" href="{% url 'logout' %}" style="font-size: 1.3rem; font-weight: 900;">{% trans "Logout" %}</a>
                         {{ user.email }}  
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'reservationclient' %}" style="font-size: 1.3rem; font-weight: 900;">Your reservations</a>
+                            <a class="nav-link" href="{% url 'reservationclient' %}" style="font-size: 1.3rem; font-weight: 900;">{% trans "Your reservations" %}</a>
                         </li>
                         {% if user.email == "ishimwegraciella17@gmail.com" %}
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'admin' %}" style="font-size: 1.3rem; font-weight: 900;">Dashboard</a>
+                            <a class="nav-link" href="{% url 'admin' %}" style="font-size: 1.3rem; font-weight: 900;">{% trans "Dashboard"  %}</a>
                         </li>
                         {% endif %}
 
@@ -50,13 +50,22 @@
                 {% else %}
                     <ul class="navbar-nav">
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'login' %}" style="font-size: 1.3rem; font-weight: 900;">Login</a>
+                            <a class="nav-link" href="{% url 'login' %}" style="font-size: 1.3rem; font-weight: 900;">{% trans "Login" %}</a>
                         </li>
                         <li class="nav-item">
-                            <a class="nav-link" href="{% url 'signup' %}" style="font-size: 1.3rem; font-weight: 900;">Register</a>
+                            <a class="nav-link" href="{% url 'signup' %}" style="font-size: 1.3rem; font-weight: 900;">{% trans "Register" %}</a>
                         </li>
                     </ul>
                 {% endif %}
+
+                <form class="form-inline my-2 my-lg-0" method="post" action="{% url 'set_language' %}">
+                    {% csrf_token %}
+                    <select name="language" class="form-control" onchange="this.form.submit()">
+                         <option value="en" {% if LANGUAGE_CODE == 'en' %}selected{% endif %}>{% trans "English" %}</option> 
+                         <option value="fr" {% if LANGUAGE_CODE == 'fr' %}selected{% endif %}>{% trans "French" %}</option>
+                         <option value="sw" {% if LANGUAGE_CODE == 'sw' %}selected{% endif %}>{% trans "Swahili" %}</option>
+                    </select>
+                </form>
             </div>
         </nav>
     </header>
@@ -71,7 +80,7 @@
 
     <footer class="bg-darkcyan text-white py-3 mt-5">
         <div class="container">
-            <p class="mb-0 text-center">&copy; 2024 SRS Site</p>
+            <p class="mb-0 text-center">&copy; 2024 {% trans "SRS Site" %}</p>
         </div>
     </footer>
 

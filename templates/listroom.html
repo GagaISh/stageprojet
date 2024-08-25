@@ -1,23 +1,24 @@
 {% extends 'dashboard.html' %}
 
-{% block main_content %}
-
 {% load humanize %}
 
 {% load fontawesome_5 %}
 
+{% load i18n %}
+
+{% block main_content %}
 <div class="container-fluid container_listroom">
-  <h2>List Rooms</h2>
+  <h2>{% trans "List Rooms" %}</h2>
 
   <div class="row">
     <div class="col-md-12">
       <form action="" method="GET" class="form-inline filter_room-form" enctype="multipart/form-data">
         <select name="availability" id="availability" class="form-control mr-2">
-          <option value="Tous">All</option>
-          <option value="True">Available</option>
-          <option value="False">Not available</option>
+          <option value="Tous">{% trans "All" %}</option>
+          <option value="True">{% trans "Available" %}</option>
+          <option value="False">{% trans "Not available" %}</option>
         </select>
-        <button type="submit" name="btn_filter" class="btn btn-primary">Filter</button>
+        <button type="submit" name="btn_filter" class="btn btn-primary">{% trans "Filter" %}</button>
       </form>
     </div>
   </div>
@@ -25,15 +26,15 @@
   <div class="row">
     <div class="col-md-12">
       <form action="" method="GET" class="form-inline search_room-form">
-        <input type="search" placeholder="search" name="search" class="form-control mr-2" />
-        <button type="submit" name="btn_SearchRoom" class="btn btn-primary">Search</button>
+        <input type="search" placeholder="{% trans 'Search' %}" name="search" class="form-control mr-2" />
+        <button type="submit" name="btn_SearchRoom" class="btn btn-primary">{% trans "Search" %}</button>
       </form>
     </div>
   </div>
 
   <div class="row">
     <div class="col-md-12">
-      <a href="{% url 'addroom' %}"><button type="submit" id="btnAddRoom" class="btn btn-success">Add Room</button></a>
+      <a href="{% url 'addroom' %}"><button type="submit" id="btnAddRoom" class="btn btn-success">{% trans "Add Room" %}</button></a>
     </div>
   </div>
 
@@ -41,20 +42,19 @@
 
 <form method="post">
 
-
-
 <table class="table table-striped">
   <thead>
     <tr>
-      <th>Room Name</th>
-      <th>Place</th>
-      <th>Capacity</th>
-      <th>Price</th>
-      <th>image</th>
-      <th>Availability</th>
-      <th>Actions</th>
+      <th>{% trans "Room Name" %}</th>
+      <th>{% trans "Place" %}</th>
+      <th>{% trans "Capacity" %}</th>
+      <th>{% trans "Price" %}</th>
+      <th>{% trans "image" %}</th>
+      <th>{% trans "Availability" %}</th>
+      <th>{% trans "Actions" %}</th>
     </tr>
   </thead>
+  
   <tbody>
     {% for data in datas %}
     <tr>
@@ -66,7 +66,7 @@
         {% if data.image %}
         <img src="{{ data.image.url }}" alt="{{ data.room_name }}" width="100">
         {% else %}
-        No image
+        {% blocktrans %}No image{% endblocktrans %}
         {% endif %}
       </td>
       <td>
@@ -77,8 +77,8 @@
         {% endif %}
       </td>
       <td>
-        <a href="{% url 'update_room' data.id %}"><button type="button" name="btn_update" class="btn btn-primary btn-update">UPDATE</button></a>
-        <a href="{% url 'delete_room' data.id %}"><button type="button" name="btn-delete" value="{{ data.id}}" class="btn btn-danger">DELETE</button></a>
+        <a href="{% url 'update_room' data.id %}"><button type="button" name="btn_update" class="btn btn-primary btn-update">{% trans "UPDATE" %}</button></a>
+        <a href="{% url 'delete_room' data.id %}"><button type="button" name="btn-delete" value="{{ data.id}}" class="btn btn-danger">{% trans "DELETE" %}</button></a>
       </td>
     </tr>
     {% endfor %}

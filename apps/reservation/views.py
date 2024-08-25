@@ -13,10 +13,11 @@ from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse, reverse_lazy
 from django.utils.dateparse import parse_date
 from django.utils.decorators import method_decorator
-from django.views import View
+from django.views import View   
 from django.views.generic import TemplateView
 from django.views.generic.edit import FormView
 from django.utils import timezone
+from django.utils.translation import gettext_lazy as _
 
 from apps.reservation.models import Booking, CustomUser, Room
 
@@ -83,7 +84,7 @@ class LoginView(TemplateView):
                 return HttpResponseRedirect(reverse("home"))
 
         else:
-            error_message = "Identifiants incorrects"
+            error_message = _("Identifiants incorrects")
         return render(request, "login.html", {"error": error_message})
 
 
@@ -118,8 +119,7 @@ class AddRoomView(View):
             room.save()
             return redirect("listroom")
         else:
-            return HttpResponse("Room name is required.")
-
+            return HttpResponse(_("Room name is required."))
 
 @method_decorator(login_required, name="dispatch")
 class BookingView(TemplateView):
@@ -140,7 +140,7 @@ class BookingView(TemplateView):
             room = Room.objects.get(room_name=room_name)
             id_room = room.id
         except Room.DoesNotExist:
-            error_message = "Room name not found."
+            error_message =_("Room name not found.")
             return render(
                 request, "booking.html", {"error": error_message, "room": room}
             )
@@ -149,20 +149,20 @@ class BookingView(TemplateView):
         end_date = datetime.strptime(end_date, "%Y-%m-%d").date()
 
         if start_date < date.today():
-            error_message = "Start date must be greater than or equal to today's date."
+            error_message =_("Start date must be greater than or equal to today's date.")
             return render(
                 request, "booking.html", {"error": error_message, "room": room}
             )
 
         if end_date < start_date:
-            error_message = "End date must be greater than or equal to start date."
+            error_message =_("End date must be greater than or equal to start date.")
             return render(
                 request, "booking.html", {"error": error_message, "room": room}
             )
 
         room = get_object_or_404(Room, id=id_room)
         if room.is_available(start_date, end_date):
-            error_message = "Room is not available for the selected dates."
+            error_message =_("Room is not available for the selected dates.")
             return render(
                 request, "booking.html", {"error": error_message, "room": room}
             )
@@ -244,9 +244,7 @@ class ListReservesView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["datas"] = Booking.objects.filter(
-            id_room__availability=False
-        )
+        context["datas"] = Booking.objects.order_by('is_cancelled')
         return context
 
     def dispatch(self, request, *args, **kwargs):
@@ -277,8 +275,6 @@ class ListReservesView(TemplateView):
             
         return super().dispatch(request, *args, **kwargs)
     
-     
-
 
 @login_required
 def delete_room(self, room_id):
@@ -322,16 +318,24 @@ def delete_booking(request, booking_id):
 
 
 class CancelBookingView(View):
+      
       def post(self, request, booking_id):
         try:
             booking = Booking.objects.get(id=booking_id)
             room = booking.id_room
         except Booking.DoesNotExist:
-            return HttpResponseNotFound("Reservation not found.")
+            return HttpResponseNotFound(_("Reservation not found."))
         booking.is_cancelled = True
         booking.save()
 
-        has_other_reservations = Booking.objects.filter(id_room=room, start_date__gt=datetime.now())
+        has_other_reservations = Booking.objects.filter(
+            id_room=room, 
+            start_date__gt=timezone.now()
+        ) | Booking.objects.filter(
+            id_room=room, 
+            start_date__lte=timezone.now(), 
+            end_date__gte=timezone.now()
+        )
     
         if  has_other_reservations.exists():
             room.availability = False
@@ -435,6 +439,7 @@ class ReservationClientView(TemplateView):
                     Q(id_room__place__icontains=search_query)
                 ).select_related("id_room", "id_user")
                 return render(request, "reservationclient.html", {"datas": queryset})
+            
         if "btn-cancel" in request.GET:
              return self.cancel_booking(request)
         return super().dispatch(request, *args, **kwargs)

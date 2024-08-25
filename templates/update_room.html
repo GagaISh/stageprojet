@@ -1,41 +1,40 @@
 {% extends 'dashboard.html' %}
+
+{% load i18n %}
+
 {% block main_content %}
 <div class="container-fluid my-4">
     <div class="row justify-content-center">
         <div class="col-md-8">
             <div class="card">
                 <div class="card-header">
-                    <h1 class="card-title">Update a Room</h1>
+                    <h1 class="card-title">{% trans "Update a Room" %}</h1>
                 </div>
                 <div class="card-body">
                     <form method="post" action="{% url 'update_room' room.id %}" enctype="multipart/form-data">
                         {% csrf_token %}
                         <div class="form-group">
-                            <label for="room_name">Room Name:</label>
+                            <label for="room_name">{% trans "Room Name" %}</label>
                             <input type="text" class="form-control" id="room_name" name="room_name" value="{{ room.room_name }}" required>
                         </div>
                         <div class="form-group">
-                            <label for="place">Place:</label>
+                            <label for="place">{% trans "Place" %}</label>
                             <input type="text" class="form-control" id="place" name="place" value="{{ room.place }}" required>
                         </div>
                         <div class="form-group">
-                            <label for="capacity">Capacity:</label>
+                            <label for="capacity">{% trans "Capacity" %}</label>
                             <input type="number" class="form-control" id="capacity" name="capacity" value="{{ room.capacity }}" required>
                         </div>
                         <div class="form-group">
-                            <label for="price">Price</label>
+                            <label for="price">{% trans "Price" %}</label>
                             <input type="number" class="form-control" id="price" name="price" value="{{ room.price }}" required>
                         </div>
                         <div class="form-group">
-                            <label for="image">Image:</label>
+                            <label for="image">{% trans "Image" %}</label>
                             <input type="file" class="form-control-file" id="image" name="image" accept="image/*" onchange="previewImage(this)">
-                            {% if room.image %}
-                            <img id="image-preview" src="{{ room.image.url }}" alt="Aperçu de l'image" class="img-fluid my-3" style="max-width: 200px;">
-                            {% else %}
-                            <p>No image</p>
-                            {% endif %}
+                            <img id="image-preview" src="{{ room.image.url }}" alt="{% trans 'Aperçu de l\'image' %}" class="img-fluid my-3" style="max-width: 200px;">
                         </div>
-                        <button type="submit" class="btn btn-primary">UPDATE</button>
+                        <button type="submit" class="btn btn-primary">{% trans "UPDATE" %}</button>
                     </form>
                 </div>
             </div>

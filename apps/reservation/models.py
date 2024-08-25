@@ -5,12 +5,13 @@ from django.contrib.auth.models import (
     User,
 )
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 
 
 class CustomUserManager(BaseUserManager):
     def create_user(self, email, password, **extra_fields):
         if not email:
-            raise ValueError("Email address is required.")
+            raise ValueError(_("Email address is required."))
         user = self.model(email=self.normalize_email(email), **extra_fields)
         user.set_password(password)
         user.save(using=self._db)
@@ -21,10 +22,9 @@ class CustomUserManager(BaseUserManager):
         extra_fields.setdefault("is_superuser", True)
 
         if extra_fields.get("is_staff") is not True:
-            raise ValueError("The superuser must have the status is_staff=True.")
+            raise ValueError(_("The superuser must have the status is_staff=True."))
         if extra_fields.get("is_superuser") is not True:
-            raise ValueError("The superuser must have the status is_superuser=True.")
-
+            raise ValueError(_("The superuser must have the status is_superuser=True."))
         return self.create_user(email, password, **extra_fields)
 
 
@@ -67,7 +67,7 @@ class Room(models.Model):
     place = models.CharField(max_length=100)
     capacity = models.CharField(max_length=100)
     price = models.CharField(max_length=50)
-    image = models.ImageField(upload_to="images", null=True, blank=True)
+    image = models.ImageField(upload_to="images", null=True, blank=False)
     availability = models.BooleanField(default=True)
 
     def is_available(self, start_date, end_date):

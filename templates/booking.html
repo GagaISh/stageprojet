@@ -1,60 +1,60 @@
 {% extends 'base.html' %}
 
-{% block content %}
+{% load i18n %}
 
+{% block content %}
 <div class="d-flex flex-column " style="min-height: 85vh;">
     <div class="container my-5 flex-grow-1">
         <div class="card w-50 mx-auto">
             <div class="card-body">
-                <h1 class="card-title mb-4 text-center" style="background-color: #00FA9A;">Reservation</h1>
+                <h1 class="card-title mb-4 text-center" style="background-color: #00FA9A;">{% trans "Reservation" %}</h1>
                 <form method="post" action="">
                     {% if error %}
                     <div class="alert alert-danger">{{ error }}</div>
                     {% endif %}
                     {% csrf_token %}
                      <div class="form-group">
-                        <label for="last_name">Last Name:</label>
+                        <label for="last_name">{% trans "Last Name:" %}</label>
                         <input type="text" class="form-control w-75" id="last_name" name="last_name" value="{{ user.last_name }}" readonly required>
                     </div> 
 
                     <div class="form-group">
-                        <label for="first_name">First Name:</label>
+                        <label for="first_name">{% trans "First Name:" %}</label>
                         <input type="text" class="form-control w-75" id="first_name" name="first_name" value="{{ user.first_name }}" readonly required>
                     </div>
                     <div class="form-group">
-                        <label for="email">Email:</label>
+                        <label for="email">{% trans "Email:" %}</label>
                         <input type="email" class="form-control w-75" id="email" name="email" value="{{ user.email }}" readonly required>
                     </div>
                     <div class="form-group">
-                        <label for="room_name">Room Name:</label>
+                        <label for="room_name">{% trans "Room Name:" %}</label>
                         <input type="text" class="form-control w-75" id="room_name" name="room_name" value="{{ room.room_name }}" readonly required>
                     </div>
                     <div class="form-group">
-                        <label for="place">Place:</label>
+                        <label for="place">{% trans "Place:" %}</label>
                         <input type="text" class="form-control w-75" id="place" name="place" value="{{ room.place }}" readonly required>
                     </div>
                     <div class="form-group">
-                        <label for="capacity">Capacity:</label>
+                        <label for="capacity">{% trans "Capacity:" %}</label>
                         <input type="text" class="form-control w-75" id="capacity" name="capacity" value="{{ room.capacity }}" readonly required>
                     </div>
                     <div class="form-group">
-                        <label for="price">Price:</label>
+                        <label for="price">{% trans "Price:" %}</label>
                         <input type="text" class="form-control w-75" id="price" name="price" value="{{ room.price }}" readonly required>
                     </div>
                     <div class="form-group">
-                        <label for="start_date">Meeting start date:</label>
+                        <label for="start_date">{% trans "Meeting start date:" %}</label>
                         <input type="date" class="form-control w-75" id="start_date" name="start_date" required>
                     </div>
                     <div class="form-group">
-                        <label for="end_date">Meeting end date:</label>
+                        <label for="end_date">{% trans "Meeting end date:" %}</label>
                         <input type="date" class="form-control w-75" id="end_date" name="end_date" required>
                     </div>
-                    <button type="submit" class="btn btn-primary">Validate reservation</button>
+                    <button type="submit" class="btn btn-primary">{% trans "Validate reservation" %}</button>
                 </form>
             </div>
         </div>
     </div>
     {% include 'partials/footer.html' %}
 </div>
-
 {% endblock %}

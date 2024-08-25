@@ -3,6 +3,7 @@ import re
 from django.contrib import messages
 from django.http import HttpResponseRedirect
 from django.urls import reverse
+from django.utils.translation import gettext_lazy as _
 
 
 class AdminEmailMiddleware:
@@ -32,7 +33,7 @@ class AdminEmailMiddleware:
                     return HttpResponseRedirect(reverse("home"))
             else:
                 messages.warning(
-                    request, "You must be connected in to access this page."
+                    request, _("You must be connected to access this page.")
                 )
                 return HttpResponseRedirect(reverse("login"))
 

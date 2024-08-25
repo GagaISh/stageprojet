@@ -1,54 +1,46 @@
 {% extends 'dashboard.html' %}
 
-{% block main_content %}
 {% load humanize %}
+
 {% load fontawesome_5 %}
 
-{% block extra_head %}
-<style>
-    .disabled {
-    opacity: 0.5; 
-    pointer-events: none;
-} 
-</style>
-    
+{% load i18n %}
 
-{% endblock %}
-
+{% block main_content %}
 <div class="container-fluid container_listreserve">
-    <h2 class="mb-4">Reservation</h2>
+    <h2 class="mb-4">{% trans "Reservation" %}</h2>
     <div class="row">
         <div class="col-12 col-md-6 mb-3">
             <form action="" method="GET" class="form-inline d-flex justify-content-center">
                 <div class="form-group mr-2">
-                    <label for="start_date">Start Date :</label>
+                    <label for="start_date">{% trans "Start date:" %}</label>
                     <input type="date" name="start_date" id="start_date" class="form-control mr-2">
                 </div>
                 <div class="form-group mr-2">
-                    <label for="end_date">End Date :</label>
+                    <label for="end_date">{% trans "End date:" %}</label>
                     <input type="date" name="end_date" id="end_date" class="form-control mr-2">
                 </div>
-                <button type="submit" name="btn_filter" class="btn btn-primary">Filter</button>
+                <button type="submit" name="btn_filter" class="btn btn-primary">{% trans "Filter" %}</button>
             </form>
         </div>
         <div class="col-12 col-md-6 mb-3">
             <form action="" method="GET" class="form-inline d-flex justify-content-center">
-                <input type="search" placeholder="search" name="search" id="search" class="form-control mr-2" />
-                <button type="submit" name="btn_SearchBooking" class="btn btn-primary">Search</button>
+                <input type="search" placeholder="{% trans 'Search' %}" name="search" id="search" class="form-control mr-2" />
+                <button type="submit" name="btn_SearchBooking" class="btn btn-primary">{% trans "Search" %}</button>
             </form>
         </div>
     </div>
     <table class="table table-striped">
         <thead>
             <tr>
-                <th>Client</th>
-                <th>Room Name</th>
-                <th>Place</th>
-                <th>Capacity</th>
-                <th>Price</th>
-                <th>Meeting Start Date</th>
-                <th>Metting End date</th>
-                <th>Actions</th>
+                <th>{% trans "Client" %}</th>
+                <th>{% trans "Room Name" %}</th>
+                <th>{% trans "Place" %}</th>
+                <th>{% trans "Capacity" %}</th>
+                <th>{% trans "Price" %}</th>
+                <th>{% trans "Meeting Start Date" %}</th>
+                <th>{% trans "Meeting End Date" %}</th>
+                <th>{% trans "Actions" %}</th>
             </tr>
         </thead>
         <tbody>
@@ -58,7 +50,7 @@
                     <br>
                     {{ booking.id_user.email }}
                     {% if booking.is_cancelled %}
-                        <p style="color: red;">Cette réservation a été annulée</p>
+                        <p style="color: red;">{% blocktrans %}This reservation has been cancelled{% endblocktrans %}</p>
                     {% endif %}
                 </td>
                 <td>{{ booking.room_name }}</td>
@@ -70,7 +62,7 @@
                 <td>
                     {% if not booking.is_cancelled %}
                         <a href="{% url 'delete_booking' booking.id %}">
-                            <button type="button" name="btn-delete" class="btn btn-danger">DELETE</button>
+                            <button type="button" name="btn-delete" class="btn btn-danger">{% trans "DELETE" %}</button>
                         </a>
                     {% endif %}
                 </td>
