@@ -7,7 +7,6 @@ from apps.reservation.serializers import (
     RoomSerializer,
 )
 
-
 class CustomUserViewSet(viewsets.ModelViewSet):
     queryset = CustomUser.objects.all()
     serializer_class = CustomUserSerializer

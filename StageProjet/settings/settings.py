@@ -47,11 +47,15 @@ INSTALLED_APPS = [
     "django.contrib.humanize",
     "django_filters",
     "fontawesome_5",
+    "django_google_maps",
 ]
 REST_FRAMEWORK = {
     "DEFAULT_FILTER_BACKENDS": [
         "django_filters.rest_framework.DjangoFilterBackend",
         "rest_framework.filters.SearchFilter",
+    ],
+    "DEFAULT_PERMISSION_CLASSES": [
+        "rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly"
     ]
 }
 
@@ -92,16 +96,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = "StageProjet.wsgi.application"
 
-
-# Database
-# https://docs.djangoproject.com/en/5.0/ref/settings/#databases
-
-# DATABASES = {
-#    "default": {
-#        "ENGINE": "django.db.backends.sqlite3",
-#       "NAME": BASE_DIR / "db.sqlite3",
-#   }
-# }
 
 DATABASES = {
     "default": {
@@ -199,4 +193,4 @@ EMAIL_HOST = "smtp.gmail.com"
 EMAIL_PORT = 587
 EMAIL_USE_TLS = True
 EMAIL_HOST_USER = "ishimwegraciella17@gmail.com"
-EMAIL_HOST_PASSWORD = "aweu vlcf pose fcmw"
+EMAIL_HOST_PASSWORD = "przi kixs mram ivvd"

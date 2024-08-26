@@ -12,7 +12,7 @@
 
   <div class="row">
     <div class="col-md-12">
-      <form action="" method="GET" class="form-inline filter_room-form" enctype="multipart/form-data">
+      <form action="" method="GET" class="form-inline filter_room-form" enctype="multipart/form-room">
         <select name="availability" id="availability" class="form-control mr-2">
           <option value="Tous">{% trans "All" %}</option>
           <option value="True">{% trans "Available" %}</option>
@@ -56,29 +56,29 @@
   </thead>
   
   <tbody>
-    {% for data in datas %}
+    {% for room in rooms %}
     <tr>
-      <td>{{ data.room_name }}</td>
-      <td>{{ data.place }}</td>
-      <td>{{ data.capacity }}</td>
-      <td>{{ data.price|intcomma }}</td>
+      <td>{{ room.room_name }}</td>
+      <td>{{ room.place }}</td>
+      <td>{{ room.capacity }}</td>
+      <td>{{ room.price|intcomma }}</td>
       <td>
-        {% if data.image %}
-        <img src="{{ data.image.url }}" alt="{{ data.room_name }}" width="100">
+        {% if room.image %}
+        <img src="{{ room.image.url }}" alt="{{ room.room_name }}" width="100">
         {% else %}
         {% blocktrans %}No image{% endblocktrans %}
         {% endif %}
       </td>
       <td>
-        {% if data.availability %}
+        {% if room.availability %}
            <i class="fas fa-check" style="color: green;"></i>
         {% else %}
           <i class="fas fa-times" style="color: red;"></i>
         {% endif %}
       </td>
       <td>
-        <a href="{% url 'update_room' data.id %}"><button type="button" name="btn_update" class="btn btn-primary btn-update">{% trans "UPDATE" %}</button></a>
-        <a href="{% url 'delete_room' data.id %}"><button type="button" name="btn-delete" value="{{ data.id}}" class="btn btn-danger">{% trans "DELETE" %}</button></a>
+        <a href="{% url 'update_room' room.id %}"><button type="button" name="btn_update" class="btn btn-primary btn-update">{% trans "UPDATE" %}</button></a>
+        <a href="{% url 'delete_room' room.id %}"><button type="button" name="btn-delete" value="{{ room.id}}" class="btn btn-danger">{% trans "DELETE" %}</button></a>
       </td>
     </tr>
     {% endfor %}

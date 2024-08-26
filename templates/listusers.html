@@ -18,16 +18,16 @@
                 </tr>
             </thead>
             <tbody>
-                {% for data in datas %}
+                {% for user in users %}
                 <tr>
-                    <td>{{data.id}} <br>{{ data.last_name }}</td>
-                    <td>{{ data.first_name }}</td>
-                    <td>{{ data.birth_date }}</td>
-                    <td>{{ data.telephone }}</td>
-                    <td>{{ data.address }}</td>
-                    <td>{{ data.email }}</td>
+                    <td>{{user.id}} <br>{{ user.last_name }}</td>
+                    <td>{{ user.first_name }}</td>
+                    <td>{{ user.birth_date }}</td>
+                    <td>{{ user.telephone }}</td>
+                    <td>{{ user.address }}</td>
+                    <td>{{ user.email }}</td>
                     <td>
-                        <a href="{% url 'delete_user' data.id %}" name="btn-delete" class="btn btn-danger btn-sm">{% trans "DELETE" %}</a>
+                        <a href="{% url 'delete_user' user.id %}" name="btn-delete" class="btn btn-danger btn-sm">{% trans "DELETE" %}</a>
                     </td>
                 </tr>
                 {% endfor %}

@@ -202,7 +202,7 @@ class ListRoomView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["datas"] = Room.objects.all().order_by("id")
+        context["rooms"] = Room.objects.all().order_by("id")
         return context
 
     def dispatch(self, request, *args, **kwargs):
@@ -215,14 +215,14 @@ class ListRoomView(TemplateView):
                 queryset = Room.objects.filter(availability=avai).order_by("id")
             else:
                 queryset = Room.objects.all().order_by("id")
-            return render(request, "listroom.html", {"datas": queryset})
+            return render(request, "listroom.html", {"rooms": queryset})
         elif "btn_SearchRoom" in request.GET:
             name = request.GET.get("search")
             if name:
                 queryset = Room.objects.filter(
                     Q(room_name__icontains=name) | Q(place__icontains=name)
                 )
-                return render(request, "listroom.html", {"datas": queryset})
+                return render(request, "listroom.html", {"rooms": queryset})
         return super().dispatch(request, *args, **kwargs)
 
 
@@ -233,7 +233,7 @@ class ListUsersView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["datas"] = CustomUser.objects.order_by("id")
+        context["users"] = CustomUser.objects.order_by("id")
         return context
 
 
@@ -244,7 +244,7 @@ class ListReservesView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["datas"] = Booking.objects.order_by('is_cancelled')
+        context["bookings"] = Booking.objects.order_by('is_cancelled')
         return context
 
     def dispatch(self, request, *args, **kwargs):
@@ -260,7 +260,7 @@ class ListReservesView(TemplateView):
                 start_date__gte=start_date,
                 end_date__lte=end_date,
             ).select_related("id_room", "id_user")
-            return render(request, "listreserve.html", {"datas": queryset})
+            return render(request, "listreserve.html", {"bookings": queryset})
 
         if "btn_SearchBooking" in request.GET:
             search_query = request.GET.get("search")
@@ -271,7 +271,7 @@ class ListReservesView(TemplateView):
                     | Q(id_user__first_name__icontains=search_query)
                     | Q(id_room__room_name__icontains=search_query)
                 ).select_related("id_room", "id_user")
-                return render(request, "listreserve.html", {"datas": queryset})
+                return render(request, "listreserve.html", {"bookings": queryset})
             
         return super().dispatch(request, *args, **kwargs)
     
@@ -320,19 +320,18 @@ def delete_booking(request, booking_id):
 class CancelBookingView(View):
       
       def post(self, request, booking_id):
-        try:
-            booking = Booking.objects.get(id=booking_id)
-            room = booking.id_room
-        except Booking.DoesNotExist:
-            return HttpResponseNotFound(_("Reservation not found."))
+        booking = Booking.objects.get(id=booking_id)
+        room = booking.id_room
         booking.is_cancelled = True
         booking.save()
 
         has_other_reservations = Booking.objects.filter(
             id_room=room, 
+            is_cancelled=False,
             start_date__gt=timezone.now()
         ) | Booking.objects.filter(
             id_room=room, 
+            is_cancelled=False,
             start_date__lte=timezone.now(), 
             end_date__gte=timezone.now()
         )
@@ -346,8 +345,7 @@ class CancelBookingView(View):
         room.save()
         return redirect('reservationclient')
 
-
-    
+   
 @login_required
 def delete_user(request, user_id):
     user = CustomUser.objects.get(id=user_id)

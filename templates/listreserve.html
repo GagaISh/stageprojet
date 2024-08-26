@@ -44,7 +44,7 @@
             </tr>
         </thead>
         <tbody>
-            {% for booking in datas %}
+            {% for booking in bookings %}
             <tr class="{% if booking.is_cancelled %}disabled{% endif %}">
                 <td>{{ booking.id_user.last_name }} {{ booking.id_user.first_name }}
                     <br>
