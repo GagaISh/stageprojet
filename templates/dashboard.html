@@ -2,6 +2,8 @@
 
 {% load static %}
 
+{% load fontawesome_5 %}
+
 <!DOCTYPE html>
 <html lang="">
 <head>
@@ -15,7 +17,7 @@
 <body class="board">
     <div class="container-fluid board">
         <header>
-            <a class="logout-link" href="{% url 'logout' %}">{% trans "Logout" %}</a>
+            <a class="logout-link" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i>{% trans "Logout" %}</a>
             <h1>{% trans "Administration" %}</h1>
         </header>
         <div class="row">

@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2024-08-22 15:21+0200\n"
+"POT-Creation-Date: 2024-08-27 20:49+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -18,15 +18,15 @@ msgstr ""
 "Content-Transfer-Encoding: 8bit\n"
 "Plural-Forms: nplurals=2; plural=(n > 1);\n"
 
-#: StageProjet/settings/settings.py:161 templates/base.html:64
+#: StageProjet/settings/settings.py:155 templates/base.html:69
 msgid "English"
 msgstr "Anglais"
 
-#: StageProjet/settings/settings.py:162 templates/base.html:65
+#: StageProjet/settings/settings.py:156 templates/base.html:70
 msgid "French"
 msgstr "Français"
 
-#: StageProjet/settings/settings.py:163 templates/base.html:66
+#: StageProjet/settings/settings.py:157 templates/base.html:71
 msgid "Swahili"
 msgstr ""
 
@@ -50,33 +50,29 @@ msgstr "Le superutilisateur doit avoir le statut is_staff=True."
 msgid "The superuser must have the status is_superuser=True."
 msgstr "Le superutilisateur doit avoir le statut is_superuser=True."
 
-#: apps/reservation/views.py:87
+#: apps/reservation/views.py:88
 msgid "Identifiants incorrects"
 msgstr "Identifiants incorrects"
 
-#: apps/reservation/views.py:122
+#: apps/reservation/views.py:123
 msgid "Room name is required."
 msgstr "Le nom de la salle est obligatoire."
 
-#: apps/reservation/views.py:143
+#: apps/reservation/views.py:144
 msgid "Room name not found."
 msgstr "Le nom de la salle n'a pas été trouvé."
 
-#: apps/reservation/views.py:152
+#: apps/reservation/views.py:153
 msgid "Start date must be greater than or equal to today's date."
 msgstr "La date de début doit être supérieure ou égale à la date du jour."
 
-#: apps/reservation/views.py:158
+#: apps/reservation/views.py:159
 msgid "End date must be greater than or equal to start date."
 msgstr "La date de fin doit être supérieure ou égale à la date de début."
 
-#: apps/reservation/views.py:165
+#: apps/reservation/views.py:166
 msgid "Room is not available for the selected dates."
 msgstr "La salle n'est pas disponible pour les dates sélectionnées."
-
-#: apps/reservation/views.py:329
-msgid "Reservation not found."
-msgstr "Réservation introuvable."
 
 #: django-venv/Lib/site-packages/django/contrib/messages/apps.py:16
 msgid "Messages"
@@ -1293,30 +1289,30 @@ msgstr ""
 msgid "Connect, get help, or contribute"
 msgstr ""
 
-#: templates/addroom.html:7 templates/listroom.html:37
+#: templates/addroom.html:7 templates/listroom.html:35
 msgid "Add Room"
 msgstr "Ajouter une salle"
 
 #: templates/addroom.html:11 templates/listreserve.html:37
-#: templates/listroom.html:48 templates/reservationclient.html:38
+#: templates/listroom.html:46 templates/reservationclient.html:38
 #: templates/update_room.html:17
 msgid "Room Name"
 msgstr "Nom de la salle"
 
 #: templates/addroom.html:15 templates/listreserve.html:38
-#: templates/listroom.html:49 templates/reservationclient.html:39
+#: templates/listroom.html:47 templates/reservationclient.html:39
 #: templates/update_room.html:21
 msgid "Place"
 msgstr "Lieu"
 
 #: templates/addroom.html:19 templates/listreserve.html:39
-#: templates/listroom.html:50 templates/reservationclient.html:40
+#: templates/listroom.html:48 templates/reservationclient.html:40
 #: templates/update_room.html:25
 msgid "Capacity"
 msgstr "Capacité"
 
 #: templates/addroom.html:23 templates/listreserve.html:40
-#: templates/listroom.html:51 templates/reservationclient.html:41
+#: templates/listroom.html:49 templates/reservationclient.html:41
 #: templates/update_room.html:29
 msgid "Price"
 msgstr "Prix"
@@ -1329,45 +1325,44 @@ msgstr "Aperçu de l\\"
 msgid "Add"
 msgstr "Ajouter"
 
-#: templates/base.html:9
+#: templates/base.html:11
 msgid "Meeting Room Reservation System"
 msgstr "Système de réservation de salle de réunion"
 
-#: templates/base.html:24
+#: templates/base.html:27
 msgid "Home"
 msgstr "Accueil"
 
-#: templates/base.html:27
+#: templates/base.html:30
 msgid "Services"
 msgstr "Services"
 
-#: templates/base.html:30
+#: templates/base.html:33
 msgid "Contact"
 msgstr "Contact"
 
-#: templates/base.html:37 templates/dashboard.html:18
+#: templates/base.html:40 templates/dashboard.html:20
 msgid "Logout"
 msgstr "Déconnexion"
 
-#: templates/base.html:41
+#: templates/base.html:45
 msgid "Your reservations"
 msgstr "Vos réservations"
 
-#: templates/base.html:45
+#: templates/base.html:50
 msgid "Dashboard"
 msgstr "Tableau de bord"
 
-#: templates/base.html:53 templates/login.html:11 templates/login.html:33
-#: templates/password_reset_complete.html:15
+#: templates/base.html:58 templates/login.html:11 templates/login.html:43
+#: templates/password_reset_complete.html:13
 msgid "Login"
 msgstr "Connexion"
 
-#: templates/base.html:56 templates/password_reset_complete.html:22
-#: templates/signup.html:50
+#: templates/base.html:61 templates/signup.html:112
 msgid "Register"
 msgstr "Inscription"
 
-#: templates/base.html:83
+#: templates/base.html:88
 msgid "SRS Site"
 msgstr "Site SRS"
 
@@ -1376,16 +1371,16 @@ msgstr "Site SRS"
 msgid "Reservation"
 msgstr "Réservation"
 
-#: templates/booking.html:17 templates/contact.html:13 templates/signup.html:18
+#: templates/booking.html:17 templates/contact.html:13 templates/signup.html:32
 msgid "Last Name:"
 msgstr "Nom:"
 
-#: templates/booking.html:22 templates/contact.html:17 templates/signup.html:22
+#: templates/booking.html:22 templates/contact.html:22 templates/signup.html:42
 msgid "First Name:"
 msgstr "Prénom:"
 
-#: templates/booking.html:26 templates/contact.html:21 templates/login.html:25
-#: templates/password_reset.html:15 templates/signup.html:38
+#: templates/booking.html:26 templates/contact.html:31 templates/login.html:25
+#: templates/password_reset.html:15 templates/signup.html:82
 msgid "Email:"
 msgstr "Email:"
 
@@ -1437,27 +1432,27 @@ msgstr "Envoyez-nous un message"
 msgid "here"
 msgstr "ici"
 
-#: templates/contact.html:25
+#: templates/contact.html:40
 msgid "Message:"
 msgstr "Message:"
 
-#: templates/contact.html:28 templates/password_reset.html:21
+#: templates/contact.html:48 templates/password_reset.html:21
 msgid "Send"
 msgstr "Envoyer"
 
-#: templates/dashboard.html:10 templates/dashboard.html:19
+#: templates/dashboard.html:12 templates/dashboard.html:21
 msgid "Administration"
 msgstr "Administration"
 
-#: templates/dashboard.html:24 templates/listusers.html:7
+#: templates/dashboard.html:26 templates/listusers.html:7
 msgid "List Users"
 msgstr "Liste des utilisateurs"
 
-#: templates/dashboard.html:25 templates/listroom.html:11
+#: templates/dashboard.html:27 templates/listroom.html:9
 msgid "List Rooms"
 msgstr "Liste des salles"
 
-#: templates/dashboard.html:26
+#: templates/dashboard.html:28
 msgid "Reservations"
 msgstr "Réservations"
 
@@ -1497,6 +1492,36 @@ msgstr "Aucune image disponible"
 msgid "Booking"
 msgstr "Réservation"
 
+#: templates/home.html:74 templates/listreserve.html:79
+#: templates/listroom.html:91 templates/listusers.html:41
+msgid "first"
+msgstr "premier"
+
+#: templates/home.html:75 templates/listreserve.html:80
+#: templates/listroom.html:92 templates/listusers.html:42
+msgid "previous"
+msgstr "précédent"
+
+#: templates/home.html:79 templates/listreserve.html:84
+#: templates/listroom.html:96 templates/listusers.html:46
+msgid "Page"
+msgstr "Page"
+
+#: templates/home.html:79 templates/listreserve.html:84
+#: templates/listroom.html:96 templates/listusers.html:46
+msgid "of"
+msgstr "de"
+
+#: templates/home.html:83 templates/listreserve.html:88
+#: templates/listroom.html:100 templates/listusers.html:50
+msgid "next"
+msgstr "suivant"
+
+#: templates/home.html:84 templates/listreserve.html:89
+#: templates/listroom.html:101 templates/listusers.html:51
+msgid "last"
+msgstr "dernier"
+
 #: templates/listreserve.html:16 templates/reservationclient.html:16
 msgid "Start date:"
 msgstr "Date de début:"
@@ -1505,13 +1530,13 @@ msgstr "Date de début:"
 msgid "End date:"
 msgstr "Date de fin:"
 
-#: templates/listreserve.html:23 templates/listroom.html:21
+#: templates/listreserve.html:23 templates/listroom.html:19
 #: templates/reservationclient.html:23
 msgid "Filter"
 msgstr "Filtre"
 
 #: templates/listreserve.html:28 templates/listreserve.html:29
-#: templates/listroom.html:29 templates/listroom.html:30
+#: templates/listroom.html:27 templates/listroom.html:28
 #: templates/reservationclient.html:28 templates/reservationclient.html:29
 msgid "Search"
 msgstr "Recherche"
@@ -1528,7 +1553,7 @@ msgstr "Date de début de la réunion"
 msgid "Meeting End Date"
 msgstr "Date de fin de la réunion"
 
-#: templates/listreserve.html:43 templates/listroom.html:54
+#: templates/listreserve.html:43 templates/listroom.html:52
 #: templates/listusers.html:17 templates/reservationclient.html:44
 msgid "Actions"
 msgstr "Actions"
@@ -1537,36 +1562,36 @@ msgstr "Actions"
 msgid "This reservation has been cancelled"
 msgstr "Cette réservation a été annulée"
 
-#: templates/listreserve.html:65 templates/listroom.html:81
+#: templates/listreserve.html:65 templates/listroom.html:79
 #: templates/listusers.html:30
 msgid "DELETE"
 msgstr "SUPPRIMER"
 
-#: templates/listroom.html:17
+#: templates/listroom.html:15
 msgid "All"
 msgstr "Tout"
 
-#: templates/listroom.html:18
+#: templates/listroom.html:16
 msgid "Available"
 msgstr "Disponible"
 
-#: templates/listroom.html:19
+#: templates/listroom.html:17
 msgid "Not available"
 msgstr "Non disponible"
 
-#: templates/listroom.html:52
+#: templates/listroom.html:50
 msgid "image"
 msgstr "image"
 
-#: templates/listroom.html:53
+#: templates/listroom.html:51
 msgid "Availability"
 msgstr "Disponibilité"
 
-#: templates/listroom.html:69
+#: templates/listroom.html:67
 msgid "No image"
 msgstr "Aucune image"
 
-#: templates/listroom.html:80 templates/update_room.html:37
+#: templates/listroom.html:78 templates/update_room.html:37
 msgid "UPDATE"
 msgstr "METTRE À JOUR"
 
@@ -1594,20 +1619,19 @@ msgstr "Adresse"
 msgid "Email"
 msgstr "Email"
 
-#: templates/login.html:29 templates/signup.html:42
+#: templates/login.html:34 templates/signup.html:92
 msgid "Password:"
 msgstr "Mot de passe:"
 
-#: templates/login.html:34
+#: templates/login.html:44
 msgid "Create an account"
 msgstr "Créer un compte"
 
-#: templates/login.html:36
+#: templates/login.html:46
 msgid "Forgot Password"
 msgstr "Mot de passe oublié"
 
-#: templates/password_reset.html:11 templates/password_reset_complete.html:19
-#: templates/password_reset_confirm.html:24
+#: templates/password_reset.html:11 templates/password_reset_confirm.html:24
 #: templates/password_reset_done.html:11
 msgid "Reset Password"
 msgstr "Réinitialiser le mot de passe"
@@ -1616,17 +1640,9 @@ msgstr "Réinitialiser le mot de passe"
 msgid "Cancel"
 msgstr "Annuler"
 
-#: templates/password_reset_complete.html:11
-msgid "Log in to your account"
-msgstr "Connectez-vous à votre compte"
-
-#: templates/password_reset_complete.html:19
-msgid "Forgot your password?"
-msgstr "Mot de passe oublié?"
-
-#: templates/password_reset_complete.html:22
-msgid "Don't have an account?"
-msgstr "Vous n'avez pas de compte ?"
+#: templates/password_reset_complete.html:12
+msgid "Your password has been changed successfully."
+msgstr ""
 
 #: templates/password_reset_confirm.html:11
 msgid "Password Reset Confirm"
@@ -1651,34 +1667,46 @@ msgstr ""
 msgid "last Name and first Name"
 msgstr "Nom et Prenom"
 
-#: templates/reservationclient.html:64
+#: templates/reservationclient.html:65
 msgid "Annuler"
 msgstr ""
 
-#: templates/reservationclient.html:71
+#: templates/reservationclient.html:74
 msgid "No reservations found."
 msgstr "Aucune réservation trouvée."
 
-#: templates/signup.html:11
+#: templates/signup.html:25
 msgid "Registration"
 msgstr "Inscription"
 
-#: templates/signup.html:26
+#: templates/signup.html:52
 msgid "Date of birth:"
 msgstr "Date de naissance:"
 
-#: templates/signup.html:30
+#: templates/signup.html:62
 msgid "Phone Number:"
 msgstr "Numéro de téléphone:"
 
-#: templates/signup.html:34
+#: templates/signup.html:72
 msgid "Address:"
 msgstr "Adresse:"
 
-#: templates/signup.html:46
+#: templates/signup.html:102
 msgid "Confirm password:"
 msgstr "Confirmer le mot de passe:"
 
 #: templates/update_room.html:11
 msgid "Update a Room"
 msgstr "Mettre à jour une salle"
+
+#~ msgid "Reservation not found."
+#~ msgstr "Réservation introuvable."
+
+#~ msgid "Log in to your account"
+#~ msgstr "Connectez-vous à votre compte"
+
+#~ msgid "Forgot your password?"
+#~ msgstr "Mot de passe oublié?"
+
+#~ msgid "Don't have an account?"
+#~ msgstr "Vous n'avez pas de compte ?"

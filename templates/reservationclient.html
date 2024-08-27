@@ -45,33 +45,36 @@
                 </tr>
             </thead>
             <tbody>
-                {% for booking in datas %}
-                    {% if not booking.is_cancelled %}
-                        <tr>
-                            <td>{{ booking.id_user.last_name }} {{ booking.id_user.first_name }}
-                                <br>
-                                {{ booking.id_user.email }}
-                            </td>
-                            <td>{{ booking.room_name }}</td>
-                            <td>{{ booking.id_room.place }}</td>
-                            <td>{{ booking.id_room.capacity }}</td>
-                            <td>{{ booking.id_room.price|intcomma }} </td>
-                            <td>{{ booking.start_date }}</td>
-                            <td>{{ booking.end_date }}</td>
-                            <td>
-                                    <form method="post" action="{% url 'cancel_booking' booking.id %}">
-                                        {% csrf_token %}
-                                        <button type="submit" name="btn_cancel">{% trans "Annuler" %}</button>
-                                    </form>
-                            </td>
-                        </tr>
-                    {% endif %}
-                    {% empty %}
+                {% if datas %}
+                    {% for booking in datas %}
+                        {% if not booking.is_cancelled %}
+                            <tr>
+                                <td>{{ booking.id_user.last_name }} {{ booking.id_user.first_name }}
+                                    <br>
+                                    {{ booking.id_user.email }}
+                                </td>
+                                <td>{{ booking.room_name }}</td>
+                                <td>{{ booking.id_room.place }}</td>
+                                <td>{{ booking.id_room.capacity }}</td>
+                                <td>{{ booking.id_room.price|intcomma }} </td>
+                                <td>{{ booking.start_date }}</td>
+                                <td>{{ booking.end_date }}</td>
+                                <td>
+                                        <form method="post" action="{% url 'cancel_booking' booking.id %}">
+                                            {% csrf_token %}
+                                            <button type="submit" name="btn_cancel">{% trans "Annuler" %}</button>
+                                        </form>
+                                </td>
+                            </tr>
+                        {% endif %}
+                    {% endfor %}
+
+                {% else %}
                     <tr>
                         <td colspan="8" class="text-center">{% trans "No reservations found." %}</td>
-                    </tr>
-                {% endfor %}
-            </tbody>
+                    </tr> 
+                {% endif %}               
+        </tbody>
         </table>
     </div>
 </div>

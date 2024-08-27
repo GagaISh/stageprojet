@@ -8,7 +8,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.files.storage import default_storage
 from django.core.mail import send_mail
 from django.db.models import Q
-from django.http import HttpResponse, HttpResponseRedirect,HttpResponseNotFound
+from django.http import HttpResponse, HttpResponseRedirect
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse, reverse_lazy
 from django.utils.dateparse import parse_date
@@ -18,6 +18,7 @@ from django.views.generic import TemplateView
 from django.views.generic.edit import FormView
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
+from django.core.paginator import Paginator
 
 from apps.reservation.models import Booking, CustomUser, Room
 
@@ -186,10 +187,16 @@ class HomeView(View):
 
     def get(self, request):
         room = Room.objects.all()
-        context = {"Room": room}
+        paginator = Paginator(room,3)
+        page_number = request.GET.get("page")
+        page_obj = paginator.get_page(page_number)
+        context = {
+            "page_obj": page_obj,
+            "is_paginated": page_obj.has_other_pages(),
+        }
+        
         return render(request, self.template_name, context)
-
-
+        
 @login_required
 def dashboard(request):
     return render(request, "dashboard.html")
@@ -199,10 +206,17 @@ def dashboard(request):
 class ListRoomView(TemplateView):
     template_name = "listroom.html"
     redirect_field_name = "next"
+    paginate_by = 3
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["rooms"] = Room.objects.all().order_by("id")
+        rooms = Room.objects.all().order_by("id")
+        paginator = Paginator(rooms, 5)
+        page_number = self.request.GET.get("page")
+        page_obj = paginator.get_page(page_number)
+        context["rooms"] = page_obj.object_list
+        context["page_obj"] = page_obj
+        context["is_paginated"] = page_obj.has_other_pages()
         return context
 
     def dispatch(self, request, *args, **kwargs):
@@ -233,7 +247,13 @@ class ListUsersView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["users"] = CustomUser.objects.order_by("id")
+        users= CustomUser.objects.all().order_by("id")
+        paginator = Paginator(users,10)
+        page_number = self.request.GET.get("page")
+        page_obj = paginator.get_page(page_number)
+        context["users"] = page_obj.object_list
+        context["page_obj"] = page_obj
+        context["is_paginated"] = page_obj.has_other_pages()
         return context
 
 
@@ -244,7 +264,13 @@ class ListReservesView(TemplateView):
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context["bookings"] = Booking.objects.order_by('is_cancelled')
+        bookings = Booking.objects.all().order_by("is_cancelled")
+        paginator = Paginator(bookings,8)
+        page_number = self.request.GET.get("page")
+        page_obj = paginator.get_page(page_number)
+        context["bookings"] = page_obj.object_list
+        context["page_obj"] = page_obj
+        context["is_paginated"] =page_obj.has_other_pages()
         return context
 
     def dispatch(self, request, *args, **kwargs):
@@ -370,10 +396,10 @@ class ContactView(TemplateView):
 
         subject = f"Message de {last_name}"
         body = f"""
-        Last Name: {last_name}
-        First Name: {first_name}
-        email: {email}
-        message: {message}
+        {_("Last Name:")} {last_name}
+        {_("First Name:")} {first_name}
+        {_("Email:")} {email}
+        {_("Message:")} {message}
         """
         send_mail(subject, body, email, ["ishimwegraciella17@gmail.com"])
 

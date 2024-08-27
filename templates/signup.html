@@ -2,11 +2,25 @@
 
 {% load i18n %}
 
+{% block extra_head %}
+    <style>
+        .card {
+        max-width: 800px;
+        margin: 0 auto;
+        max-height: 750px;
+        }
+    
+        form {
+            width: 100%;
+        }
+    </style>
+{% endblock %}
+
 {% block content %}
-<div class="d-flex flex-column justify-content-center align-items-center" style="min-height: 84vh;">
+<div class="d-flex flex-column justify-content-center align-items-center" style="min-height: 81.4vh;">
     <div class="row justify-content-center">
         <div class="col-md-8">
-            <div class="card">
+            <div class="card mt-5">
                 <div class="card-body">
                     <h1 class="card-title mb-4 text-center" style="background-color: #66CDAA;">{% trans "Registration" %}</h1>
                     {% if error %}
@@ -14,39 +28,87 @@
                     {% endif %}
                     <form method="post" action="{% url 'signup' %}" class="row g-3">
                         {% csrf_token %}
-                        <div class="col-md-6">
+                        <div class="col-12">
                             <label for="last_name" class="form-label">{% trans "Last Name:" %}</label>
-                            <input type="text" class="form-control" id="last_name" name="last_name" required>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                </div>
+                                <input type="text" class="form-control form-control-sm " style="height: 38px;" id="last_name" name="last_name" required>
+                            </div>  
                         </div>
-                        <div class="col-md-6">
+
+                        <div class="col-12">
                             <label for="first_name" class="form-label">{% trans "First Name:" %}</label>
-                            <input type="text" class="form-control" id="first_name" name="first_name" required>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-user"></i></span>
+                                </div>
+                                <input type="text" class="form-control form-control-sm" style="height: 38px;" id="first_name" name="first_name" required>
+                            </div>  
                         </div>
-                        <div class="col-md-6">
+
+                        <div class="col-12">
                             <label for="birth_date" class="form-label">{% trans "Date of birth:" %}</label>
-                            <input type="date" class="form-control" id="birth_date" name="birth_date" required>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-calendar-alt"></i></i></span>
+                                </div>
+                                <input type="date" class="form-control form-control-sm" style="height: 38px;" id="birth_date" name="birth_date" required>
+                            </div>
                         </div>
-                        <div class="col-md-6">
+
+                        <div class="col-12">
                             <label for="telephone" class="form-label">{% trans "Phone Number:" %}</label>
-                            <input type="tel" class="form-control" id="telephone" name="telephone" required>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-phone-alt"></i></span>
+                                </div>
+                                <input type="tel" class="form-control form-control-sm" style="height: 38px;" id="telephone" name="telephone" required>
+                            </div>
                         </div>
-                        <div class="col-md-6">
+
+                        <div class="col-12">
                             <label for="address" class="form-label">{% trans "Address:" %}</label>
-                            <input type="text" class="form-control" id="address" name="address" required>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-map-marker-alt"></i></i></span>
+                                </div>
+                                <input type="text" class="form-control form-control-sm" style="height: 38px;" id="address" name="address" required>
+                            </div>
                         </div>
-                        <div class="col-md-6">
+
+                        <div class="col-12">
                             <label for="email" class="form-label">{% trans "Email:" %}</label>
-                            <input type="email" class="form-control" id="email" name="email" required>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-envelope"></i></span>
+                                </div>
+                                <input type="email" class="form-control form-control-sm" style="height: 38px;" id="email" name="email" required>
+                            </div>
                         </div>
-                        <div class="col-md-6">
+
+                        <div class="col-12">
                             <label for="password1" class="form-label">{% trans "Password:" %}</label>
-                            <input type="password" class="form-control" id="password1" name="password1" required>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                                </div>
+                                <input type="password" class="form-control form-control-sm" style="height: 38px;" id="password1" name="password1" required>
+                            </div>
                         </div>
-                        <div class="col-md-6">
+
+                        <div class="col-12">
                             <label for="password2" class="form-label">{% trans "Confirm password:" %}</label>
-                            <input type="password" class="form-control" id="password2" name="password2" required>
+                            <div class="input-group">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"><i class="fas fa-lock"></i></span>
+                                </div>
+                                <input type="password" class="form-control form-control-sm" style="height: 38px;" id="password2" name="password2" required>
+                            </div>
                         </div>
-                        <div class="col-12 text-center">
+
+                        <div class="col-12 text-center mt-3">
                             <button type="submit" class="btn btn-primary">{% trans "Register" %}</button>
                         </div>
                     </form>

@@ -43,27 +43,48 @@
 
 <div id="services-section" class="container">
     <div class="row">
-        {% for room in Room %}
+        {% for page_obj in page_obj %}
         <div class="col-md-4 mb-4">
             <div class="card">
-                {% if room.image %}
-                <img src="{{room.image.url}}" class="card-img-top" alt="{{ room.room_name }}">
+                {% if page_obj.image %}
+                <img src="{{page_obj.image.url}}" class="card-img-top" alt="{{ page_obj.room_name }}">
                 {% else %}
                 <div class="card-body">
-                    <h5 class="card-title">{{ room.room_name }}</h5>
+                    <h5 class="card-title">{{ page_obj.room_name }}</h5>
                     <p class="card-text">{% trans "No image available" %}</p>
                 </div>
                 {% endif %}
                 <div class="card-body">
-                    <h5 class="card-title">{% trans "Room Name:" %} {{ room.room_name }}</h5>
-                    <p class="card-text">{% trans "Place:" %} {{ room.place }}</p>
-                    <p class="card-text">{% trans "Capacity:" %} {{ room.capacity }}</p>
-                    <p class="card-text">{% trans "Price:" %} {{ room.price|intcomma }}</p>
-                    <a href="{% url 'booking' room.id %}" class="btn btn-primary">{% trans "Booking" %}</a>
+                    <h5 class="card-title">{% trans "Room Name:" %} {{ page_obj.room_name }}</h5>
+                    <p class="card-text">{% trans "Place:" %} {{ page_obj.place }}</p>
+                    <p class="card-text">{% trans "Capacity:" %} {{ page_obj.capacity }}</p>
+                    <p class="card-text">{% trans "Price:" %} {{ page_obj.price|intcomma }}</p>
+                    <a href="{% url 'booking' page_obj.id %}" class="btn btn-primary">{% trans "Booking" %}</a>
                 </div>
             </div>
         </div>
         {% endfor %}
     </div>
+</div>
+<div class="d-flex justify-content-center my-5">
+    {% if is_paginated %}
+    <div class="pagination">
+        <span class="step-links">
+            {% if page_obj.has_previous %}
+            <a href="?page=1#services-section">&laquo; {% trans "first" %}</a>
+            <a href="?page={{ page_obj.previous_page_number }}#services-section">{% trans "previous" %}</a>
+            {% endif %}
+
+            <span class="current">
+                {% trans "Page" %} {{ page_obj.number }} {% trans "of" %} {{ page_obj.paginator.num_pages }}.
+            </span>
+
+            {% if page_obj.has_next %}
+            <a href="?page={{ page_obj.next_page_number }}#services-section">{% trans "next" %}</a>
+            <a href="?page={{ page_obj.paginator.num_pages }}#services-section">{% trans "last" %} &raquo;</a>
+            {% endif %}
+        </span>
+    </div>
+    {% endif %}
 </div>
 {% endblock %}

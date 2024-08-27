@@ -2,8 +2,6 @@
 
 {% load humanize %}
 
-{% load fontawesome_5 %}
-
 {% load i18n %}
 
 {% block main_content %}
@@ -85,5 +83,25 @@
   </tbody>
 </table>
 </form>
+<div class="d-flex justify-content-center my-5">
+  {% if is_paginated %}
+    <div class="pagination">
+        <span class="step-links">
+            {% if page_obj.has_previous %}
+                <a href="?page=1">&laquo; {% trans "first" %}</a>
+                <a href="?page={{ page_obj.previous_page_number }}">{% trans "previous" %}</a>
+            {% endif %}
 
+            <span class="current">
+              {% trans "Page" %} {{ page_obj.number }} {% trans "of" %} {{ page_obj.paginator.num_pages }}.
+            </span>
+
+            {% if page_obj.has_next %}
+                <a href="?page={{ page_obj.next_page_number }}">{% trans "next" %}</a>
+                <a href="?page={{ page_obj.paginator.num_pages }}">{% trans "last" %} &raquo;</a>
+            {% endif %}
+        </span>
+    </div>
+  {% endif %}
+</div>
 {% endblock %}
