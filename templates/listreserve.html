@@ -43,7 +43,7 @@
         </thead>
         <tbody>
             {% for booking in bookings %}
-            <tr class="{% if booking.is_cancelled %}disabled{% endif %}">
+            <tr {% if booking.is_cancelled %} class="table-warning" {% endif %}>
                 <td>{{ booking.id_user.last_name }} {{ booking.id_user.first_name }}
                     <br>
                     {{ booking.id_user.email }}
@@ -54,13 +54,13 @@
                 <td>{{ booking.room_name }}</td>
                 <td>{{ booking.id_room.place }}</td>
                 <td>{{ booking.id_room.capacity }}</td>
-                <td>{{ booking.id_room.price|intcomma }}</td>
+                <td>{{ booking.id_room.price|intcomma }} Fbu</td>
                 <td>{{ booking.start_date }}</td>
                 <td>{{ booking.end_date }}</td>
                 <td>
-                    {% if not booking.is_cancelled %}
+                    {% if  booking.is_cancelled %}
                         <a href="{% url 'delete_booking' booking.id %}">
-                            <button type="button" name="btn-delete" class="btn btn-danger">{% trans "DELETE" %}</button>
+                            <button type="button" name="btn-delete" class="btn btn-danger"><i class="fas fa-trash"></i></button>
                         </a>
                     {% endif %}
                 </td>

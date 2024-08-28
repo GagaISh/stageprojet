@@ -20,14 +20,16 @@
             <tbody>
                 {% for user in users %}
                 <tr>
-                    <td>{{user.id}} <br>{{ user.last_name }}</td>
+                    <td>{{ user.last_name }}</td>
                     <td>{{ user.first_name }}</td>
                     <td>{{ user.birth_date }}</td>
                     <td>{{ user.telephone }}</td>
                     <td>{{ user.address }}</td>
                     <td>{{ user.email }}</td>
                     <td>
-                        <a href="{% url 'delete_user' user.id %}" name="btn-delete" class="btn btn-danger btn-sm">{% trans "DELETE" %}</a>
+                        <a href="{% url 'delete_user' user.id %}">
+                            <button type="button" name="btn-delete" class="btn btn-danger"><i class="fas fa-trash"></i></button>
+                        </a> 
                     </td>
                 </tr>
                 {% endfor %}

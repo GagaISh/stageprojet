@@ -19,6 +19,7 @@ from django.views.generic.edit import FormView
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.core.paginator import Paginator
+from decimal import Decimal
 
 from apps.reservation.models import Booking, CustomUser, Room
 
@@ -179,6 +180,7 @@ class BookingView(TemplateView):
             end_date=end_date,
         )
         booking.save()
+        
         return redirect("home")
 
 
@@ -326,7 +328,7 @@ class UpdateRoomView(TemplateView):
         room.room_name = request.POST.get("room_name")
         room.place = request.POST.get("place")
         room.capacity = request.POST.get("capacity")
-        room.price = request.POST.get("price")
+        room.price = Decimal(request.POST.get("price"))
         if "image" in request.FILES:
             room.image = request.FILES["image"]
         room.save()

@@ -59,7 +59,7 @@
       <td>{{ room.room_name }}</td>
       <td>{{ room.place }}</td>
       <td>{{ room.capacity }}</td>
-      <td>{{ room.price|intcomma }}</td>
+      <td>{{ room.price|intcomma }} Fbu</td>
       <td>
         {% if room.image %}
         <img src="{{ room.image.url }}" alt="{{ room.room_name }}" width="100">
@@ -75,8 +75,8 @@
         {% endif %}
       </td>
       <td>
-        <a href="{% url 'update_room' room.id %}"><button type="button" name="btn_update" class="btn btn-primary btn-update">{% trans "UPDATE" %}</button></a>
-        <a href="{% url 'delete_room' room.id %}"><button type="button" name="btn-delete" value="{{ room.id}}" class="btn btn-danger">{% trans "DELETE" %}</button></a>
+        <a href="{% url 'update_room' room.id %}"><button type="button" name="btn_update" class="btn btn-primary btn-update"><i class="fas fa-edit"></i></button></a>
+        <a href="{% url 'delete_room' room.id %}"><button type="button" name="btn-delete" class="btn btn-danger"><i class="fas fa-trash"></i></button></a>
       </td>
     </tr>
     {% endfor %}

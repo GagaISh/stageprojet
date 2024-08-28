@@ -4,6 +4,8 @@
 
 {% load i18n %} 
 
+{% load static %}
+
 {% block content %}
 <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
     <ol class="carousel-indicators">
@@ -40,32 +42,33 @@
         <span class="sr-only">Next</span>
     </a>
 </div>
-
-<div id="services-section" class="container">
-    <div class="row">
-        {% for page_obj in page_obj %}
-        <div class="col-md-4 mb-4">
-            <div class="card">
-                {% if page_obj.image %}
-                <img src="{{page_obj.image.url}}" class="card-img-top" alt="{{ page_obj.room_name }}">
-                {% else %}
-                <div class="card-body">
-                    <h5 class="card-title">{{ page_obj.room_name }}</h5>
-                    <p class="card-text">{% trans "No image available" %}</p>
-                </div>
-                {% endif %}
-                <div class="card-body">
-                    <h5 class="card-title">{% trans "Room Name:" %} {{ page_obj.room_name }}</h5>
-                    <p class="card-text">{% trans "Place:" %} {{ page_obj.place }}</p>
-                    <p class="card-text">{% trans "Capacity:" %} {{ page_obj.capacity }}</p>
-                    <p class="card-text">{% trans "Price:" %} {{ page_obj.price|intcomma }}</p>
-                    <a href="{% url 'booking' page_obj.id %}" class="btn btn-primary">{% trans "Booking" %}</a>
+<section>
+    <div id="services-section" class="container">
+        <div class="row">
+            {% for page_obj in page_obj %}
+            <div class="col-md-4 mb-4">
+                <div class="card">
+                    {% if page_obj.image %}
+                    <img src="{{page_obj.image.url}}" class="card-img-top" alt="{{ page_obj.room_name }}">
+                    {% else %}
+                    <div class="card-body">
+                        <h5 class="card-title">{{ page_obj.room_name }}</h5>
+                        <p class="card-text">{% trans "No image available" %}</p>
+                    </div>
+                    {% endif %}
+                    <div class="card-body">
+                        <h5 class="card-title truncated" title="{{ page_obj.room_name }}" >{% trans "Room Name:" %} {{ page_obj.room_name }}</h5>
+                        <p class="card-text">{% trans "Place:" %} {{ page_obj.place }}</p>
+                        <p class="card-text">{% trans "Capacity:" %} {{ page_obj.capacity }}</p>
+                        <p class="card-text">{% trans "Price:" %} {{ page_obj.price|intcomma }} Fbu</p>
+                        <a href="{% url 'booking' page_obj.id %}" class="btn btn-primary">{% trans "Booking" %}</a>
+                    </div>
                 </div>
             </div>
+            {% endfor %}
         </div>
-        {% endfor %}
     </div>
-</div>
+</section>
 <div class="d-flex justify-content-center my-5">
     {% if is_paginated %}
     <div class="pagination">

@@ -56,3 +56,9 @@ header {
     opacity: 0.5; 
     pointer-events: none;
 } 
+
+.truncated {
+    white-space: nowrap;          
+    overflow: hidden;             
+    text-overflow: ellipsis;     
+}

@@ -16,9 +16,10 @@
 </head>
 <body class="board">
     <div class="container-fluid board">
-        <header>
+        <header class="d-flex justify-content-between align-items-center">
+            <a class="nav-link text-white" href="{% url 'home' %}" style="font-size: 1.3rem; font-weight: 900;">{% trans "Home" %}</a>
+            <h1 class="flex-grow-1 text-center">{% trans "Administration" %}</h1>
             <a class="logout-link" href="{% url 'logout' %}"><i class="fas fa-sign-out-alt"></i>{% trans "Logout" %}</a>
-            <h1>{% trans "Administration" %}</h1>
         </header>
         <div class="row">
             <div class="col-md-3 sidebar">
@@ -29,7 +30,8 @@
                 </ul>
             </div>
             <div class="col-md-9 main">
-                {% block main_content %}{% endblock %}
+                {% block main_content %}
+                {% endblock %}
             </div>
         </div>
     </div>
