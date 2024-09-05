@@ -60,6 +60,9 @@ class CustomUser(AbstractBaseUser):
 
     def has_module_perms(self, app_label):
         return True
+    
+    def has_perms(self, perms, obj=None):
+        return all(self.has_perm(perm, obj) for perm in perms)
 
 
 class Room(models.Model):

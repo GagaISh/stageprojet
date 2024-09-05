@@ -47,7 +47,7 @@ INSTALLED_APPS = [
     "django.contrib.humanize",
     "django_filters",
     "fontawesome_5",
-    "django_google_maps",
+    "rest_framework.authtoken",
 ]
 REST_FRAMEWORK = {
     "DEFAULT_FILTER_BACKENDS": [
@@ -55,8 +55,12 @@ REST_FRAMEWORK = {
         "rest_framework.filters.SearchFilter",
     ],
     "DEFAULT_PERMISSION_CLASSES": [
-        "rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly"
-    ]
+        "rest_framework.permissions.IsAuthenticated",
+        "rest_framework.authentication.TokenAuthentication",
+        "rest_framework.authentication.SessionAuthentication",
+        "rest_framework.authentication.BasicAuthentication"
+    ],
+    
 }
 
 MIDDLEWARE = [

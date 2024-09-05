@@ -7,22 +7,24 @@ from django.contrib.auth.views import (
     PasswordResetView,
 )
 from django.contrib.staticfiles.urls import staticfiles_urlpatterns
-from django.urls import include, path
-from rest_framework import routers
+from django.urls import path,include
+from rest_framework.routers import DefaultRouter
+
 
 from apps.reservation import views
 from apps.reservation.views import *
 
-from .api import BookingViewSet, CustomUserViewSet, RoomViewSet
+from .api import CustomUserViewSet,RoomViewSet,BookingViewSet,CustomObtainAuthToken
 
 
-router = routers.DefaultRouter()
-router.register("user", CustomUserViewSet, basename="user")
-router.register("room", RoomViewSet, basename="room")
-router.register("booking", BookingViewSet, basename="booking")
+router = DefaultRouter()
+router.register(r'users',CustomUserViewSet,basename='users')
+router.register(r'room',RoomViewSet,basename='room')
+router.register(r'booking',BookingViewSet,basename='booking')
 
 urlpatterns = [
-    path("api/", include(router.urls)),
+    path("api/",include(router.urls)),
+    path("api/auth/login/", CustomObtainAuthToken.as_view(), name="api_token_auth"),
     path("", HomeView.as_view(), name="home"),
     path("signup/", SignupView.as_view(), name="signup"),
     path("login/", LoginView.as_view(), name="login"),
@@ -66,6 +68,8 @@ urlpatterns = [
         name="password_reset_complete",
     ),
 ]
+
+
 
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
