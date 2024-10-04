@@ -328,14 +328,12 @@ class UpdateRoomView(TemplateView):
         room.room_name = request.POST.get("room_name")
         room.place = request.POST.get("place")
         room.capacity = request.POST.get("capacity")
-        # room.price = Decimal(request.POST.get("price"))
-        price_str = request.POST.get("price")
+        price = request.POST.get("price")
 
         try:
-            price_str = price_str.replace(" ", "").replace(",", ".")
-            room.price = Decimal(price_str)
+            price = price.replace(" ", "").replace(",", ".")
+            room.price = Decimal(price)
         except (InvalidOperation, AttributeError):
-            print(room.price)
             return HttpResponseBadRequest("Invalid price format")
     
         if "image" in request.FILES:
