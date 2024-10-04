@@ -2,36 +2,47 @@ from rest_framework import status,viewsets
 from rest_framework.response import Response
 from rest_framework.permissions import IsAuthenticated
 from django.utils.translation import gettext_lazy as _
-from rest_framework.authentication import TokenAuthentication
-from rest_framework.authtoken.views import ObtainAuthToken
 from django.contrib.auth import authenticate
-from rest_framework.authtoken.models import Token
+from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from apps.reservation.models import Booking, CustomUser, Room
 from apps.reservation.serializers import (
     BookingSerializer,
     CustomUserSerializer,
     RoomSerializer,
-    AuthTokenSerializer,
 )
 
 class CustomUserViewSet(viewsets.ModelViewSet):
-    authentication_classes = [TokenAuthentication]
+    authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
     
     queryset = CustomUser.objects.all()
     serializer_class = CustomUserSerializer
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        serializer = self.get_serializer(queryset, many=True)
+        return Response({"data": serializer.data}, status=status.HTTP_200_OK)
 
     def destroy(self, request, *args, **kwargs):
         return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
     
 class RoomViewSet(viewsets.ModelViewSet):
 
-    authentication_classes = [TokenAuthentication]
+    authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
 
     serializer_class = RoomSerializer
 
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        serializer = self.get_serializer(queryset, many=True)
+        response_data = []
+        for room in serializer.data:
+            room['image'] = {'image': room['image']}  
+            response_data.append(room)
+        return Response({"data": response_data})
+    
     def get_queryset(self):
         queryset=Room.objects.all()
         availability=self.request.query_params.get('availability')
@@ -46,10 +57,15 @@ class RoomViewSet(viewsets.ModelViewSet):
         
 class BookingViewSet(viewsets.ModelViewSet):
 
-    authentication_classes = [TokenAuthentication]
+    authentication_classes = [JWTAuthentication]
     permission_classes = [IsAuthenticated]
 
     serializer_class = BookingSerializer
+
+    def list(self, request, *args, **kwargs):
+        queryset = self.get_queryset()
+        serializer = self.get_serializer(queryset, many=True)
+        return Response({"data": serializer.data}, status=status.HTTP_200_OK)
 
     def get_queryset(self):
         queryset = Booking.objects.all()
@@ -66,17 +82,7 @@ class BookingViewSet(viewsets.ModelViewSet):
     def destroy(self, request, *args, **kwargs):
         return Response(status=status.HTTP_405_METHOD_NOT_ALLOWED)
 
-class CustomObtainAuthToken(ObtainAuthToken):
-    serializer_class = AuthTokenSerializer
 
-    def post(self,request):
-        serializer = self.serializer_class(data=request.data)
-        serializer.is_valid(raise_exception=True)
-        user=authenticate(email=serializer.validated_data['email'],password=serializer.validated_data['password'])
-        if user is not None:
-            token,created=Token.objects.get_or_create(user=user)
-            return Response({'token':token.key},status=status.HTTP_200_OK)
-        return Response({'error': 'Invalid Credentials'}, status=status.HTTP_401_UNAUTHORIZED)
 
         
 

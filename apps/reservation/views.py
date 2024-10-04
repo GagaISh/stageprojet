@@ -8,7 +8,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.files.storage import default_storage
 from django.core.mail import send_mail
 from django.db.models import Q
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect,HttpResponseBadRequest
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse, reverse_lazy
 from django.utils.dateparse import parse_date
@@ -19,7 +19,7 @@ from django.views.generic.edit import FormView
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.core.paginator import Paginator
-from decimal import Decimal
+from decimal import Decimal,InvalidOperation
 
 from apps.reservation.models import Booking, CustomUser, Room
 
@@ -328,7 +328,16 @@ class UpdateRoomView(TemplateView):
         room.room_name = request.POST.get("room_name")
         room.place = request.POST.get("place")
         room.capacity = request.POST.get("capacity")
-        room.price = Decimal(request.POST.get("price"))
+        # room.price = Decimal(request.POST.get("price"))
+        price_str = request.POST.get("price")
+
+        try:
+            price_str = price_str.replace(" ", "").replace(",", ".")
+            room.price = Decimal(price_str)
+        except (InvalidOperation, AttributeError):
+            print(room.price)
+            return HttpResponseBadRequest("Invalid price format")
+    
         if "image" in request.FILES:
             room.image = request.FILES["image"]
         room.save()

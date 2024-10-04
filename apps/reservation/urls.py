@@ -14,7 +14,7 @@ from rest_framework.routers import DefaultRouter
 from apps.reservation import views
 from apps.reservation.views import *
 
-from .api import CustomUserViewSet,RoomViewSet,BookingViewSet,CustomObtainAuthToken
+from .api import CustomUserViewSet,RoomViewSet,BookingViewSet
 
 
 router = DefaultRouter()
@@ -24,7 +24,6 @@ router.register(r'booking',BookingViewSet,basename='booking')
 
 urlpatterns = [
     path("api/",include(router.urls)),
-    path("api/auth/login/", CustomObtainAuthToken.as_view(), name="api_token_auth"),
     path("", HomeView.as_view(), name="home"),
     path("signup/", SignupView.as_view(), name="signup"),
     path("login/", LoginView.as_view(), name="login"),
@@ -68,7 +67,6 @@ urlpatterns = [
         name="password_reset_complete",
     ),
 ]
-
 
 
 if settings.DEBUG:

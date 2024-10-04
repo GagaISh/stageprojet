@@ -14,6 +14,7 @@ import os
 import sys
 from pathlib import Path
 from django.utils.translation import gettext_lazy as _
+from datetime import timedelta
 
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 sys.path.append(os.path.join(BASE_DIR, "apps"))
@@ -48,6 +49,7 @@ INSTALLED_APPS = [
     "django_filters",
     "fontawesome_5",
     "rest_framework.authtoken",
+    "rest_framework_simplejwt",
 ]
 REST_FRAMEWORK = {
     "DEFAULT_FILTER_BACKENDS": [
@@ -56,11 +58,15 @@ REST_FRAMEWORK = {
     ],
     "DEFAULT_PERMISSION_CLASSES": [
         "rest_framework.permissions.IsAuthenticated",
+    ],
+    "DEFAULT_AUTHENTICATION_CLASSES": [
+        "rest_framework_simplejwt.authentication.JWTAuthentication", 
         "rest_framework.authentication.TokenAuthentication",
-        "rest_framework.authentication.SessionAuthentication",
-        "rest_framework.authentication.BasicAuthentication"
     ],
     
+}
+SIMPLE_JWT = {
+    "ACCESS_TOKEN_LIFETIME": timedelta(minutes=5),
 }
 
 MIDDLEWARE = [
