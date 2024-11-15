@@ -1,4 +1,5 @@
 import os
+import io
 import re
 import logging
 from datetime import date, datetime, timedelta
@@ -8,7 +9,7 @@ from django.contrib.auth.decorators import login_required
 from django.core.files.storage import default_storage
 from django.core.mail import send_mail
 from django.db.models import Q
-from django.http import HttpResponse, HttpResponseRedirect,HttpResponseBadRequest
+from django.http import HttpResponse, HttpResponseRedirect,HttpResponseBadRequest,FileResponse
 from django.shortcuts import get_object_or_404, redirect, render
 from django.urls import reverse, reverse_lazy
 from django.utils.dateparse import parse_date
@@ -20,6 +21,11 @@ from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
 from django.core.paginator import Paginator
 from decimal import Decimal,InvalidOperation
+from django.db.models import Sum,F
+from reportlab.lib.pagesizes import letter,A4
+from reportlab.platypus import SimpleDocTemplate, Table, TableStyle, Paragraph, Spacer
+from reportlab.lib import colors
+from reportlab.lib.styles import getSampleStyleSheet
 
 from apps.reservation.models import Booking, CustomUser, Room
 
@@ -288,7 +294,13 @@ class ListReservesView(TemplateView):
                 start_date__gte=start_date,
                 end_date__lte=end_date,
             ).select_related("id_room", "id_user")
-            return render(request, "listreserve.html", {"bookings": queryset})
+            total_price = queryset.aggregate(total=Sum(F('id_room__price')))['total'] or 0
+
+
+            return render(request, "listreserve.html", {
+                "bookings": queryset,
+                "total_price": total_price,
+            })
 
         if "btn_SearchBooking" in request.GET:
             search_query = request.GET.get("search")
@@ -360,7 +372,7 @@ class CancelBookingView(View):
         booking.is_cancelled = True
         booking.save()
 
-        has_other_reservations = Booking.objects.filter(
+        has_other_bookings = Booking.objects.filter(
             id_room=room, 
             is_cancelled=False,
             start_date__gt=timezone.now()
@@ -371,7 +383,7 @@ class CancelBookingView(View):
             end_date__gte=timezone.now()
         )
     
-        if  has_other_reservations.exists():
+        if  has_other_bookings.exists():
             room.availability = False
             logger.info(f"Booking cancelled. Room availability: {room.availability}")
         else:
@@ -476,3 +488,86 @@ class ReservationClientView(TemplateView):
         if "btn-cancel" in request.GET:
              return self.cancel_booking(request)
         return super().dispatch(request, *args, **kwargs)
+
+
+def generate_pdf(request):
+
+    start_date = request.GET.get("start_date")
+    end_date = request.GET.get("end_date")
+
+    start_date = parse_date(start_date) if start_date else None
+    end_date = parse_date(end_date) if end_date else None
+
+    if start_date and end_date:
+        bookings = Booking.objects.filter(
+            id_room__availability=False,
+            start_date__gte=start_date,
+            end_date__lte=end_date,
+        ).select_related("id_room", "id_user")
+    else:
+        bookings = Booking.objects.all().select_related("id_room", "id_user")
+    
+    # bookings = Booking.objects.all()
+    total_price = sum([book.id_room.price for book in bookings])
+    admin=CustomUser.objects.get(is_superuser=True)
+    # admins = CustomUser.objects.filter(is_superuser=True)
+    # if admins.exists():
+    #     admin = admins.first()  
+    # else:
+    #     raise Exception("Aucun administrateur trouvé.")
+
+    buffer=io.BytesIO()
+    doc=SimpleDocTemplate(buffer,pagesize=A4)
+    elements = []
+
+    styles = getSampleStyleSheet()
+
+    title = Paragraph(f"Rapport du {datetime.now().strftime('%d/%m/%Y')}", styles['Title'])
+    elements.append(title)
+    elements.append(Spacer(1, 12))
+
+    data = [["Client", "Nom de la salle", "Lieu", "Capacité", "Prix", "Date de début", "Date de fin"]]
+    for booking in bookings:
+        data.append([
+            Paragraph(booking.id_user.get_full_name(), styles['Normal']),
+            Paragraph(booking.room_name, styles['Normal']),
+            booking.id_room.place,
+            booking.id_room.capacity,
+            f"{booking.id_room.price} Fbu",
+            booking.start_date.strftime('%d/%m/%Y'),
+            booking.end_date.strftime('%d/%m/%Y')
+        ])
+    table = Table(data, colWidths=[80, 90, 80, 60, 80, 85, 70])  
+    table_style = TableStyle([
+        ('BACKGROUND', (0, 0), (-1, 0), colors.grey),  
+        ('TEXTCOLOR', (0, 0), (-1, 0), colors.whitesmoke),
+        ('ALIGN', (0, 0), (-1, -1), 'CENTER'),
+        ('FONTNAME', (0, 0), (-1, 0), 'Helvetica-Bold'),
+        ('FONTSIZE', (0, 0), (-1, 0), 12),
+        ('BOTTOMPADDING', (0, 0), (-1, 0), 12),
+        ('BACKGROUND', (0, 1), (-1, -1), colors.beige),
+        ('GRID', (0, 0), (-1, -1), 1, colors.black), 
+        ('BACKGROUND', (0, 1), (-1, -1), colors.beige),
+        ('TEXTCOLOR', (0, 1), (-1, -1), colors.black),
+        ('FONTSIZE', (0, 1), (-1, -1), 10),  
+    ])
+    table.setStyle(table_style)
+    elements.append(table)
+    elements.append(Spacer(1, 20))
+
+
+    total_price_paragraph = Paragraph(f"\nPrix total des réservations : {total_price} Fbu", styles['Normal'])
+    elements.append(total_price_paragraph)
+    elements.append(Spacer(1, 12))
+
+    
+    admin_paragraph = Paragraph(f"{admin.get_full_name()}", styles['Normal'])
+    elements.append(admin_paragraph)
+    elements.append(Spacer(1, 12))
+    elements.append(Paragraph("Signature", styles['Normal']))
+
+
+    doc.build(elements)
+
+    buffer.seek(0)
+    return FileResponse(buffer, as_attachment=True, filename="rapport.pdf")

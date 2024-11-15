@@ -6,7 +6,14 @@
 
 {% block main_content %}
 <div class="container-fluid container_listreserve">
-    <h2 class="mb-4">{% trans "Reservation" %}</h2>
+    <div class="row mb-4 align-items-center">
+        <div class="col-12 col-md-6">
+            <h2>{% trans "Reservation" %}</h2>
+        </div>
+        <div class="col-12 col-md-6 d-flex justify-content-end">
+            <a href="{% url 'generate_report' %}?start_date={{ request.GET.start_date }}&end_date={{ request.GET.end_date }}" class="btn btn-primary">Générer le rapport PDF</a>
+        </div>
+    </div>
     <div class="row">
         <div class="col-12 col-md-6 mb-3">
             <form action="" method="GET" class="form-inline d-flex justify-content-center">
@@ -27,7 +34,9 @@
                 <button type="submit" name="btn_SearchBooking" class="btn btn-primary">{% trans "Search" %}</button>
             </form>
         </div>
+
     </div>
+    
     <table class="table table-striped">
         <thead>
             <tr>
@@ -68,6 +77,11 @@
             {% endfor %}
         </tbody>
     </table>
+    {% if total_price %}
+        <div>
+            <strong>Prix total des réservations : {{ total_price|intcomma }} Fbu</strong>
+        </div>
+    {% endif %}
 </div>
 <div class="d-flex justify-content-center my-5">
     {% if is_paginated %}
